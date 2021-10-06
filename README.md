@@ -1,0 +1,2 @@
+# hs-arena-info
+ 
