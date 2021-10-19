@@ -2,19 +2,32 @@ body {
   background-color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul {
   margin: 0;
   padding: 0;
-  padding-top: 70px;
-/*  line-height: 1.428;*/
+  list-style: none;
 }
 /*********************************************************
 ***************************NAV****************************
 *********************************************************/
+.menu {
+  background-color: #f9f9ff;
+  border-radius: 25px;
+}
+
 .nav__row {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  background: deepskyblue;
   /*padding-bottom: 2px;*/
 }
 
@@ -27,9 +40,6 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .nav-list__button {
@@ -46,7 +56,6 @@ body {
 }
 
 .nav-list__button:hover {
-  text-decoration: none;
   color: #fff;
 }
 
@@ -85,7 +94,6 @@ body {
 
 .mana-bar {
   text-align: center;
-  cursor: pointer;
 }
 
 .mana-bar a {
@@ -99,29 +107,51 @@ body {
   filter: contrast(200%);
 }
 /*********************************************************
-***************************REST****************************
+*************************CONTENT**************************
 *********************************************************/
-#stats {
+.content {
+  background-color: #E3D3C8;
+  margin-bottom: 30px;
+}
+
+.menu-stats {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  list-style: none;
-  margin: 0;
-  text-align: center;
 }
 
-#stats a {
-  text-decoration: none;
-  display: block;
+.menu-stats a {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   padding: 0.8em;
-  color: black;
-  background: white;
+  background: #fff;
   font-size: 1.5rem;
-  border: 1px solid #fff7de;
+  border: 2px solid #dfd7be;
+
 }
 
-#stats a:hover {
-  background: #1565C0;
+.menu-stats a > div {
+  display: flex;
+  /*flex-flow: column nowrap;*/
+  justify-content: center;
+  align-items: center;
+  column-gap: 5px; /* TODO: no image gap */
+}
+
+.menu-stats a > div:first-child {
+  background-color: #5af;
+  border-radius: 5px;
+  padding: 0px 15px;
+  font-size: 0.9rem;
+  color: #fff;
+  /*background-image: url("../mana2.png");
+  width: 25px;
+  height: 27px;*/
+}
+
+.menu-stats a:hover {
+  background: #dfd7be;
 }
 
 .card-container {
@@ -131,70 +161,42 @@ body {
   grid-gap: 0.2rem;
 }
 
-.card-container > div {
-  /*background: #EDE7F6;*/
-}
-
 .card-container > div > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-p {
-  margin-bottom: 10px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-.tippy-backdrop {
-  display: none;
+/*********************************************************
+***************************MISC***************************
+*********************************************************/
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;    
+  background-color: #735348;
+  margin-bottom: 25px;
+  padding: 0 0 3px 0;
 }
-#wrapper {
-  min-height: 100%;
-  position: relative;
+
+.title {
+  font-size: 1.3rem;
+  color: #ddd;
 }
-#header {
-  background-color: #E3D3C8;
-}
-#header .title {
-  font-size: 18px;
-  color: #999999;
-}
-#header a {
-  cursor: pointer;
-}
-#link-news.news {
-  color: #635348;
-  background-color: #F3D358;
-}
-/* ------------------------------------------- */
-#container {  
-  margin: 0px auto;
-  max-width: 1600px;
-}
-#content {
-  float: left;
-}
-/* ---------------------------------------------- */
-.side-page {
-  border: 1px solid;
-  background-color: #E3D3C8;
-  padding-top: 10px;
-}
-#footer {
-  position: relative;  
-  clear: left;
-  width: 100%;
-  height: 50px;
+
+.version {
+  margin-top: -7px;
+  font-size: 0.8rem;
+  color: #fa8a8a;
   text-align: center;
-  vertical-align: middle;
-  line-height: 50px;
-  margin: auto;
-  margin-top: 10px;
 }
-.noselect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
 }
