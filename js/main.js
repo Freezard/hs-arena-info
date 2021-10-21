@@ -123,24 +123,35 @@ let HSArenaInfo = (function() {
     
     // Event listeners for menu buttons
     function initEventListeners() {
+        document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
+            document.querySelector('.nav__row-classes').style.display = 'flex';
+            document.querySelector('.nav__row-filters').style.display = 'flex';
+            clearStats();
+            clearCards();
+        });
+        
+        document.querySelectorAll('.nav__list-stats a').forEach(e => 
+            e.addEventListener('click', function() {
+                let type = this.innerHTML.toUpperCase();
+                createfilteredCardData(type);
+                createStatsMenu(type);
+                document.querySelector('.nav__row-classes').style.display = 'none';
+                document.querySelector('.nav__row-filters').style.display = 'none';
+                clearCards();
+            }));
+            
         document.querySelectorAll('.nav__list-classes a').forEach(e => 
             e.addEventListener('click', function() {
                 createClassCardData(this.getAttribute('data-json'));
+                clearCards();
                 displayCards();
             }));
             
         document.querySelectorAll('.mana-bar a').forEach(e => 
             e.addEventListener('click', function() {
                 toggleCost(parseInt(this.innerHTML), this);
+                clearCards();
                 displayCards();
-            }));
-            
-        document.querySelectorAll('.nav__list-stats a').forEach(e => 
-            e.addEventListener('click', function() {
-                let type = this.innerHTML.toUpperCase();
-                createfilteredCardData(type);
-                createStatsMenu(type);
-                // CLEAR CARDS displayCards();
             }));
     }
     /*********************************************************
@@ -184,9 +195,16 @@ let HSArenaInfo = (function() {
     /*********************************************************
     *************************DISPLAY**************************
     *********************************************************/
+    function clearCards() {
+        document.querySelector('.card-container').innerHTML = "";
+    }
+    
+    function clearStats() {
+        document.querySelector('.menu-stats').innerHTML = "";
+    }
+    
     function displayCards(cost) {
         let grid = document.querySelector('.card-container');
-        grid.innerHTML = '';
         
         for (let c in filteredCardData) {
             let card = filteredCardData[c];
@@ -235,7 +253,10 @@ let HSArenaInfo = (function() {
             li.appendChild(a);
             ul.appendChild(li);
             
-            li.addEventListener('click', function() { displayCards(parseInt(this.querySelector('div').innerHTML)); });
+            li.addEventListener('click', function() {
+                clearCards();
+                displayCards(parseInt(this.querySelector('div').innerHTML));
+            });
         }
     }
     /*********************************************************

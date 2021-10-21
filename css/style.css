@@ -21,7 +21,6 @@ ul {
 *********************************************************/
 .menu {
   background-color: #f9f9ff;
-  border-radius: 25px;
 }
 
 .nav__row {
@@ -97,7 +96,7 @@ ul {
 }
 
 .mana-bar a {
-  background-image: url("../mana2.png");
+  background-image: url("../mana.png");
   width: 25px;
   height: 27px;
   padding: 4px;
@@ -110,7 +109,7 @@ ul {
 *************************CONTENT**************************
 *********************************************************/
 .content {
-  background-color: #E3D3C8;
+  background-color: #f1edec;
   margin-bottom: 30px;
 }
 
@@ -125,10 +124,14 @@ ul {
   flex-flow: column nowrap;
   align-items: center;
   padding: 0.8em;
-  background: #fff;
+  background-color: #fff;
   font-size: 1.5rem;
-  border: 2px solid #dfd7be;
+  border: 2px solid #f1edec;
 
+}
+
+.menu-stats a:hover {
+  background: #d1cdcc;
 }
 
 .menu-stats a > div {
@@ -139,26 +142,20 @@ ul {
   column-gap: 5px; /* TODO: no image gap */
 }
 
+/* TODO: Add class*/
 .menu-stats a > div:first-child {
   background-color: #5af;
   border-radius: 5px;
   padding: 0px 15px;
   font-size: 0.9rem;
   color: #fff;
-  /*background-image: url("../mana2.png");
-  width: 25px;
-  height: 27px;*/
 }
 
-.menu-stats a:hover {
-  background: #dfd7be;
-}
-
+/* TODO: Larger images*/
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); /*150 212*/
   grid-auto-rows: 190px;
-  grid-gap: 0.2rem;
 }
 
 .card-container > div > img {
@@ -167,6 +164,7 @@ ul {
   object-fit: cover;
 }
 
+/* TODO: REMOVE (Bootstrap leftover)*/
 *,
 *::before,
 *::after {
