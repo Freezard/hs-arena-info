@@ -14,8 +14,6 @@ let HSArenaInfo = (function() {
     let totalStats;
     let totalMinions;
     
-    let version = 0.1;
-    
     // Filter for when browsing all arena cards
     let filter = {
         cost: '',
@@ -24,34 +22,15 @@ let HSArenaInfo = (function() {
         keyword: ''
     };
 
-    const rotation = ['CORE', 'EXPERT1', 'DEMON_HUNTER_INITIATE', 'KARA',
-                      'UNGORO', 'BOOMSDAY', 'BLACK_TEMPLE', 'SCHOLOMANCE', 'DARKMOON_FAIRE'];
+    const version = 0.2;
+    const rotation = ['CORE', 'GILNEAS', 'TROLL', 'ULDUM', 'DARKMOON_FAIRE', 'THE_BARRENS', 'STORMWIND'];
     
-    /*      'CORE': setsEnum.basic,
-            'EXPERT1': setsEnum.classic,
-            'DEMON_HUNTER_INITIATE': setsEnum.dh,
-            'HOF': setsEnum.hof,
-            'NAXX': setsEnum.naxxramas,
-            'GVG': setsEnum.gvg,
-            'BRM': setsEnum.blackrock,
-            'TGT': setsEnum.tgt,
-            'LOE': setsEnum.loe,
-            'OG': setsEnum.wotog,
-            'KARA': setsEnum.onik,
-            'GANGS': setsEnum.msog,
-            'UNGORO': setsEnum.ungoro,
-            'ICECROWN': setsEnum.kotft,
-            'LOOTAPALOOZA': setsEnum.kobolds,
-            'GILNEAS': setsEnum.witchwood,
-            'BOOMSDAY': setsEnum.boomsday,
-            'TROLL': setsEnum.rastakhan,
-            'DALARAN': setsEnum.ros,
-            'ULDUM': setsEnum.uldum,
-            'DRAGONS': setsEnum.dragons,
-            'YEAR_OF_THE_DRAGON': setsEnum.galakrond,
-            'BLACK_TEMPLE': setsEnum.outland,
-            'SCHOLOMANCE': setsEnum.scholomance,
-            'DARKMOON_FAIRE': setsEnum.darkmoon */
+    /*  'CORE','NAXX','GVG','BRM','TGT','LOE','OG','KARA','GANGS','UNGORO','ICECROWN:kotft',
+        'LOOTAPALOOZA':kobolds,'GILNEAS':witchwood,'BOOMSDAY','TROLL':rastakhan,'DALARAN':ros,'ULDUM',
+        'DRAGONS','YEAR_OF_THE_DRAGON':galakrond,'BLACK_TEMPLE':outland,'SCHOLOMANCE','DARKMOON_FAIRE',
+        THE_BARRENS, STORMWIND
+        
+    */
     /*********************************************************
     **************************UTILS***************************
     *********************************************************/
@@ -113,8 +92,10 @@ let HSArenaInfo = (function() {
                 totalStats[card.cost].health += card.health;
             } else if (card.mechanics !== undefined && card.mechanics.includes(type)) {
                 if (totalStats[card.cost] === undefined)
-                    totalStats[card.cost] = 0;
-                totalStats[card.cost]++;
+                    totalStats[card.cost] = { attack: 0, health: 0, minions: 0 };
+                totalStats[card.cost].attack += card.attack;
+                totalStats[card.cost].health += card.health;
+                totalStats[card.cost].minions++;
             } else continue;
 
             filteredCardData.push(card);
@@ -124,10 +105,10 @@ let HSArenaInfo = (function() {
     // Event listeners for menu buttons
     function initEventListeners() {
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
-            document.querySelector('.nav__row-classes').style.display = 'flex';
-            document.querySelector('.nav__row-filters').style.display = 'flex';
             clearStats();
             clearCards();
+            clearFilter();
+            toggleRotation(this);
         });
         
         document.querySelectorAll('.nav__list-stats a').forEach(e => 
@@ -135,24 +116,31 @@ let HSArenaInfo = (function() {
                 let type = this.innerHTML.toUpperCase();
                 createfilteredCardData(type);
                 createStatsMenu(type);
-                document.querySelector('.nav__row-classes').style.display = 'none';
-                document.querySelector('.nav__row-filters').style.display = 'none';
+                toggleStats(this);
                 clearCards();
             }));
             
         document.querySelectorAll('.nav__list-classes a').forEach(e => 
             e.addEventListener('click', function() {
                 createClassCardData(this.getAttribute('data-json'));
+                toggleClass(this);
                 clearCards();
                 displayCards();
             }));
             
-        document.querySelectorAll('.mana-bar a').forEach(e => 
+        document.querySelectorAll('.nav__list-cost a').forEach(e => 
             e.addEventListener('click', function() {
                 toggleCost(parseInt(this.innerHTML), this);
                 clearCards();
                 displayCards();
             }));
+            
+        document.querySelectorAll('.nav__list-type a').forEach(e => 
+            e.addEventListener('click', function() {
+                toggleType(this.innerHTML.toUpperCase(), this);
+                clearCards();
+                displayCards();
+            }));            
     }
     /*********************************************************
     **********************LOCAL STORAGE***********************
@@ -161,10 +149,10 @@ let HSArenaInfo = (function() {
     /*********************************************************
     **********************CARD FUNCTIONS**********************
     *********************************************************/
-    const url = 'https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json';
-    
     // Get card data from Hearthstone API
     async function getCardData() {
+        const url = 'https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json';
+        
         try {
             let request = await fetch(url);
             let arenaCardData = await request.json();
@@ -177,20 +165,57 @@ let HSArenaInfo = (function() {
     /*********************************************************
     *************************FILTER***************************
     *********************************************************/
+    function toggleRotation(el) {
+        deselectList('nav__list-stats');
+        deselectList('nav__list-classes');
+        el.classList.add('selected');
+        
+        document.querySelector('.nav__row-classes').style.display = 'flex';
+        document.querySelector('.nav__row-filters').style.display = 'flex';        
+    }
+    
+    function toggleStats(el) {
+        deselectList('nav__list-rotation');
+        deselectList('nav__list-stats');
+        el.classList.add('selected');
+        
+        document.querySelector('.nav__row-classes').style.display = 'none';
+        document.querySelector('.nav__row-filters').style.display = 'none';        
+    }
+    
+    function toggleClass(el) {
+        deselectList('nav__list-classes');
+        el.classList.add('selected');
+    }
+    
     function toggleCost(mana, el) {
         if (filter.cost === mana)
             filter.cost = '';
         else filter.cost = mana;
         
-        let selected = document.querySelector('.mana-bar a.selected');
-        if (selected !== null && selected !== el)
-            selected.classList.remove('selected');
-        
-        el.classList.toggle('selected');
+        if (deselectList('nav__list-cost') !== el)
+            el.classList.toggle('selected');
     }
     
+    function toggleType(type, el) {
+        if (filter.type === type)
+            filter.type = '';
+        else filter.type = type;
+        
+        if (deselectList('nav__list-type') !== el)
+            el.classList.toggle('selected');
+    }    
+    
     function isCardIncluded(card) {
-        return (filter.cost === '' ? true : filter.cost === 10 ? card.cost >= 10 : card.cost === filter.cost);
+        if (filter.cost !== '') {
+            if ((filter.cost !== 10 && card.cost !== filter.cost) || (filter.cost === 10 && card.cost < 10))
+                return false;
+        }
+        if (filter.type !== '') {
+            if (card.type !== filter.type)
+                return false;
+        }
+        return true;
     }
     /*********************************************************
     *************************DISPLAY**************************
@@ -201,6 +226,26 @@ let HSArenaInfo = (function() {
     
     function clearStats() {
         document.querySelector('.menu-stats').innerHTML = "";
+    }
+    
+    function clearFilter() {
+        filter = {
+                cost: '',
+                type: '',
+                tribe: '',
+                keyword: ''
+        };
+        
+        deselectList('nav__list-type');
+        deselectList('nav__list-cost');
+    }
+    
+    function deselectList(filterList) {
+        let selected = document.querySelector('.' + filterList + ' a.selected');
+        if (selected !== null)
+            selected.classList.remove('selected');
+        
+        return selected;
     }
     
     function displayCards(cost) {
@@ -221,8 +266,9 @@ let HSArenaInfo = (function() {
     function createCardImage(card) {
         let div = document.createElement('div');
         let img = document.createElement('img');
-        //img.setAttribute('src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' + averagearenaCardData[card].id + '.png');
-        img.setAttribute('src', 'images/' + card.id + '.png');
+        /*img.setAttribute('src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
+            averagearenaCardData[card].id + '.png');*/
+        img.setAttribute('src', 'images-cards/' + card.id + '.png');
         img.setAttribute('alt', card.name);
         img.setAttribute('width', '256');
         img.setAttribute('height', '387');
@@ -242,14 +288,20 @@ let HSArenaInfo = (function() {
             let div = document.createElement('div');
             div.innerHTML = cost;
             let div2 = document.createElement('div');
+            let div3 = document.createElement('div');
             
-            if (type !== 'AVERAGE')
-                div2.innerHTML = ((totalStats[cost] / totalMinions[cost]) * 100).toFixed(1) + '%';
-            else div2.innerHTML = '<img src="attack.png">' + (totalStats[cost].attack / totalMinions[cost]).toFixed(1) +
-                                 ' <img src="health.png">' + (totalStats[cost].health / totalMinions[cost]).toFixed(1);
+            if (type !== 'AVERAGE') {
+                div2.innerHTML = ((totalStats[cost].minions / totalMinions[cost]) * 100).toFixed(1) + '%';
+                div3.innerHTML = '<img src="images/attack.png">' + (totalStats[cost].attack / totalStats[cost].minions).toFixed(1) +
+                                 '<img src="images/health.png">' + (totalStats[cost].health / totalStats[cost].minions).toFixed(1);
+            }
+            else div2.innerHTML = '<img src="images/attack.png">' + (totalStats[cost].attack / totalMinions[cost]).toFixed(1) +
+                                  '<img src="images/health.png">' + (totalStats[cost].health / totalMinions[cost]).toFixed(1);
             
             a.appendChild(div);
             a.appendChild(div2);
+            if (type !== 'AVERAGE')
+                a.appendChild(div3);
             li.appendChild(a);
             ul.appendChild(li);
             

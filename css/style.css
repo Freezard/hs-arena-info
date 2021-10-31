@@ -71,12 +71,20 @@ ul {
   background: #1a68ff;
 }
 
+.nav-list__button--blue.selected {
+  filter: grayscale(70%);
+}
+
 .nav-list__button--purple {
   background: #76206d;
 }
 
 .nav-list__button--purple:hover {
   background: #96206d;
+}
+
+.nav-list__button--purple.selected {
+  background: #c6708d;
 }
 
 .nav-list__button--orange {
@@ -87,23 +95,27 @@ ul {
   background: #f6a04d;
 }
 
+.nav-list__button--orange.selected {
+  background: #c6701d;
+}
+
 .nav__row-filters {
   justify-content: space-evenly;
 }
 
-.mana-bar {
+.nav__list-cost {
   text-align: center;
 }
 
-.mana-bar a {
-  background-image: url("../mana.png");
+.nav__list-cost a {
+  background-image: url("../images/mana.png");
   width: 25px;
   height: 27px;
   padding: 4px;
 }
 
-.mana-bar a.selected {
-  filter: contrast(200%);
+.nav__list-cost a.selected {
+  filter: grayscale(70%);
 }
 /*********************************************************
 *************************CONTENT**************************
