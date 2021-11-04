@@ -22,10 +22,10 @@ let HSArenaInfo = (function() {
         keyword: ''
     };
 
-    const version = 0.2;
-    const rotation = ['CORE', 'GILNEAS', 'TROLL', 'ULDUM', 'DARKMOON_FAIRE', 'THE_BARRENS', 'STORMWIND'];
+    const version = 0.3;
+    const rotation = ['CORE', 'GANGS', 'UNGORO', 'ICECROWN', 'DALARAN', 'BLACK_TEMPLE', 'STORMWIND'];
     
-    /*  'CORE','NAXX','GVG','BRM','TGT','LOE','OG','KARA','GANGS','UNGORO','ICECROWN:kotft',
+    /*  'CORE','NAXX','GVG','BRM','TGT','LOE','OG','KARA','GANGS:gadgetzan','UNGORO','ICECROWN:kotft',
         'LOOTAPALOOZA':kobolds,'GILNEAS':witchwood,'BOOMSDAY','TROLL':rastakhan,'DALARAN':ros,'ULDUM',
         'DRAGONS','YEAR_OF_THE_DRAGON':galakrond,'BLACK_TEMPLE':outland,'SCHOLOMANCE','DARKMOON_FAIRE',
         THE_BARRENS, STORMWIND
