@@ -27,7 +27,6 @@ ul {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  /*padding-bottom: 2px;*/
 }
 
 .nav__element {
@@ -59,7 +58,7 @@ ul {
 }
 
 .nav-list__button--blue {
-  background: #1a88ff;
+  background: #735e48;
   border-right: 1px solid #fff;
 }
 
@@ -68,38 +67,39 @@ ul {
 }
 
 .nav-list__button--blue:hover {
-  background: #1a68ff;
+  background: #8c503c;
 }
 
 .nav-list__button--blue.selected {
-  filter: grayscale(70%);
+  background: #8c503c;
 }
 
 .nav-list__button--purple {
-  background: #76206d;
+  background: #494873;
 }
 
 .nav-list__button--purple:hover {
-  background: #96206d;
+  background: #5e4873;
 }
 
 .nav-list__button--purple.selected {
-  background: #c6708d;
+  background: #5e4873;
 }
 
 .nav-list__button--orange {
-  background: #d6a04d;
+  background: #487273;
 }
 
 .nav-list__button--orange:hover {
-  background: #f6a04d;
+  background: #487349;
 }
 
 .nav-list__button--orange.selected {
-  background: #c6701d;
+  background: #487349;
 }
 
 .nav__row-filters {
+  padding-top: 1px;
   justify-content: space-evenly;
 }
 
@@ -154,20 +154,18 @@ ul {
   column-gap: 5px; /* TODO: no image gap */
 }
 
-/* TODO: Add class*/
-.menu-stats a > div:first-child {
-  background-color: #5af;
-  border-radius: 5px;
+.menu-stats__cost {
+  background-color: #735348;
+  border-radius: 2px;
   padding: 0px 15px;
   font-size: 0.9rem;
   color: #fff;
 }
 
-/* TODO: Larger images*/
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); /*150 212*/
-  grid-auto-rows: 190px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: 212px;
 }
 
 .card-container > div > img {

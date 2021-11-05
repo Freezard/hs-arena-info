@@ -229,6 +229,8 @@ let HSArenaInfo = (function() {
     }
     
     function clearFilter() {
+        filteredCardData = [];
+        
         filter = {
                 cost: '',
                 type: '',
@@ -287,6 +289,7 @@ let HSArenaInfo = (function() {
             let a = document.createElement('a');
             let div = document.createElement('div');
             div.innerHTML = cost;
+            div.classList.add('menu-stats__cost');
             let div2 = document.createElement('div');
             let div3 = document.createElement('div');
             
