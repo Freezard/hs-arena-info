@@ -113,7 +113,7 @@ let HSArenaInfo = (function() {
         
         document.querySelectorAll('.nav__list-stats a').forEach(e => 
             e.addEventListener('click', function() {
-                let type = this.innerHTML.toUpperCase();
+                let type = this.innerHTML.split(" ")[0].toUpperCase();
                 createfilteredCardData(type);
                 createStatsMenu(type);
                 toggleStats(this);
@@ -323,6 +323,7 @@ let HSArenaInfo = (function() {
         
         createArenaCardData();
         initEventListeners();
+        document.querySelector('.version').style.opacity = '1';
     }    
     /*********************************************************
     ************************COLLECTION************************
@@ -342,11 +343,14 @@ let HSArenaInfo = (function() {
                             cardData = data;
                             localStorage.setItem('cardData', JSON.stringify(cardData));
                             localStorage.setItem('version', version);
+                            displayMain();
+                            document.querySelector('.version').style.transition = 'opacity 2s';
                         });
                 }
-                else cardData = JSON.parse(localStorage.getItem('cardData'));
-                
-                displayMain();
+                else {
+                    cardData = JSON.parse(localStorage.getItem('cardData'));
+                    displayMain();
+                }
             }
         }
     };

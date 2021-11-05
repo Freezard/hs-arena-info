@@ -20,7 +20,7 @@ ul {
 ***************************NAV****************************
 *********************************************************/
 .menu {
-  background-color: #f9f9ff;
+  background-color: #fbfbff;
 }
 
 .nav__row {
@@ -32,6 +32,11 @@ ul {
 .nav__element {
   display: flex;
   flex-flow: column wrap;
+}
+
+.nav__element-padding {
+  background: #f0cf9a;
+  width: 1%;
 }
 
 .nav__list {
@@ -48,7 +53,7 @@ ul {
 
 .nav-list__header {
   text-align: center;
-  background: #26004d;
+  background: #432100;
   color: #fff;
   font-size: 0.7em;
 }
@@ -57,45 +62,33 @@ ul {
   color: #fff;
 }
 
-.nav-list__button--blue {
-  background: #735e48;
-  border-right: 1px solid #fff;
+.nav-list__button-standard {
+  background: #cc9966;
+  border-right: 1px solid #f0cf9a;
 }
 
-.nav__list li:last-child a.nav-list__button--blue {
+.nav__list li:last-child a.nav-list__button-standard {
   border-right: none;
 }
 
-.nav-list__button--blue:hover {
-  background: #8c503c;
+.nav-list__button-standard:hover, .nav-list__button-standard.selected {
+  background: #735e48;
 }
 
-.nav-list__button--blue.selected {
-  background: #8c503c;
+.nav-list__button-rotation {
+  background: #dc9966;
 }
 
-.nav-list__button--purple {
-  background: #494873;
+.nav-list__button-rotation:hover, .nav-list__button-rotation.selected {
+  background: #cc7014;
 }
 
-.nav-list__button--purple:hover {
-  background: #5e4873;
+.nav-list__button-average {
+  background: #bc9966;
 }
 
-.nav-list__button--purple.selected {
-  background: #5e4873;
-}
-
-.nav-list__button--orange {
-  background: #487273;
-}
-
-.nav-list__button--orange:hover {
-  background: #487349;
-}
-
-.nav-list__button--orange.selected {
-  background: #487349;
+.nav-list__button-average:hover, .nav-list__button-average.selected {
+  background: #ac7014;
 }
 
 .nav__row-filters {
@@ -187,7 +180,7 @@ ul {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;    
-  background-color: #735348;
+  background-color: #5d3707; /*432100*/
   margin-bottom: 25px;
   padding: 0 0 3px 0;
 }
@@ -202,6 +195,7 @@ ul {
   font-size: 0.8rem;
   color: #fa8a8a;
   text-align: center;
+  opacity: 0;
 }
 
 .container {
