@@ -12,15 +12,12 @@ https://freezard.github.io/hs-arena-info/
 
 ## USAGE
 
-## TODO
+## PLANNED FEATURES
 - Add card win and draft rates from HSReplay
 - Mark banned cards, add setting for hiding them
 - Remove duplicate non-core cards
-- Add drop down for filters with many choices
 - Add more filters (tribe, rarity, spell school)
-- Fix card images height (hero cards clipped)
-- Add batch displaying of cards (add more cards while scrolling down)
-- Clear card texts from <b></b>, $ and other special chars when searching
+- Add drop down for filters with many choices
 - Add helpful arena sections?
 - Add news section?
 - Add current arena sets somewhere?
