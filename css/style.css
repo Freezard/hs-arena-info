@@ -32,17 +32,17 @@ ul {
 .nav__element {
   display: flex;
   flex-flow: column wrap;
+  justify-content: center;
 }
 
 .nav__element-padding {
-  background: #f0cf9a;
-  width: 1%;
+  background: #432100;
+  width: 3px;
 }
 
 .nav__list {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
 }
 
 .nav-list__button {
