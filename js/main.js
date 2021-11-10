@@ -1,5 +1,5 @@
 /*  main.js
-    Hearthstone Arena Info
+    HSArena Info
 */
 let HSArenaInfo = (function() {
     'use strict';
@@ -19,17 +19,16 @@ let HSArenaInfo = (function() {
         cost: '',
         type: '',
         tribe: '',
-        keyword: ''
+        keyword: '',
+        search: ''
     };
 
     const version = 0.3;
     const rotation = ['CORE', 'GANGS', 'UNGORO', 'ICECROWN', 'DALARAN', 'BLACK_TEMPLE', 'STORMWIND'];
     
-    /*  'CORE','NAXX','GVG','BRM','TGT','LOE','OG','KARA','GANGS:gadgetzan','UNGORO','ICECROWN:kotft',
-        'LOOTAPALOOZA':kobolds,'GILNEAS':witchwood,'BOOMSDAY','TROLL':rastakhan,'DALARAN':ros,'ULDUM',
-        'DRAGONS','YEAR_OF_THE_DRAGON':galakrond,'BLACK_TEMPLE':outland,'SCHOLOMANCE','DARKMOON_FAIRE',
-        THE_BARRENS, STORMWIND
-        
+    /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
+        GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
+        BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND
     */
     /*********************************************************
     **************************UTILS***************************
@@ -102,7 +101,7 @@ let HSArenaInfo = (function() {
         }
     }
     
-    // Event listeners for menu buttons
+    // Menu event listeners
     function initEventListeners() {
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
             clearStats();
@@ -113,7 +112,7 @@ let HSArenaInfo = (function() {
         
         document.querySelectorAll('.nav__list-stats a').forEach(e => 
             e.addEventListener('click', function() {
-                let type = this.innerHTML.split(" ")[0].toUpperCase();
+                let type = this.innerHTML.split(' ')[0].toUpperCase();
                 createfilteredCardData(type);
                 createStatsMenu(type);
                 toggleStats(this);
@@ -123,24 +122,32 @@ let HSArenaInfo = (function() {
         document.querySelectorAll('.nav__list-classes a').forEach(e => 
             e.addEventListener('click', function() {
                 createClassCardData(this.getAttribute('data-json'));
-                toggleClass(this);
+                setClass(this);
                 clearCards();
                 displayCards();
             }));
             
         document.querySelectorAll('.nav__list-cost a').forEach(e => 
             e.addEventListener('click', function() {
-                toggleCost(parseInt(this.innerHTML), this);
+                setCost(parseInt(this.innerHTML), this);
                 clearCards();
                 displayCards();
             }));
             
         document.querySelectorAll('.nav__list-type a').forEach(e => 
             e.addEventListener('click', function() {
-                toggleType(this.innerHTML.toUpperCase(), this);
+                setType(this.innerHTML.toUpperCase(), this);
                 clearCards();
                 displayCards();
-            }));            
+            }));
+            
+        document.querySelector('.input-search').addEventListener('input', function() {
+            if (!this.validity.tooShort) {
+                setSearch(this.value);
+                clearCards();
+                displayCards();
+            }
+        });
     }
     /*********************************************************
     **********************LOCAL STORAGE***********************
@@ -164,10 +171,79 @@ let HSArenaInfo = (function() {
     }
     /*********************************************************
     *************************FILTER***************************
+    *********************************************************/    
+    function setCost(mana, el) {
+        if (filter.cost === mana)
+            filter.cost = '';
+        else filter.cost = mana;
+        
+        if (deselectList('nav__list-cost') !== el)
+            el.classList.toggle('selected');
+    }
+    
+    function setType(type, el) {
+        if (filter.type === type)
+            filter.type = '';
+        else filter.type = type;
+        
+        if (deselectList('nav__list-type') !== el)
+            el.classList.toggle('selected');
+    }
+    
+    function setSearch(input) {
+        filter.search = input;
+    }
+    
+    function clearFilter() {
+        filteredCardData = [];
+        
+        filter = {
+                cost: '',
+                type: '',
+                tribe: '',
+                keyword: '',
+                search: ''
+        };
+        
+        deselectList('nav__list-type');
+        deselectList('nav__list-cost');
+    }    
+    
+    function isCardIncluded(card) {
+        if (filter.cost !== '') {
+            if ((filter.cost !== 10 && card.cost !== filter.cost) || (filter.cost === 10 && card.cost < 10))
+                return false;
+        }
+        if (filter.type !== '') {
+            if (filter.type !== card.type)
+                return false;
+        }
+        if (filter.search !== '') {
+            let search = filter.search.toLowerCase();
+            let name = card.name.toLowerCase();
+            let text = card.text ? card.text.toLowerCase().replace(/[^\x00-\x7F]/g, ' ').replace(/\s+/g, ' ') : '';
+                        
+            if (!name.includes(search) && !text.includes(search))
+                return false;
+        }
+        
+        return true;
+    }
+    /*********************************************************
+    *************************DISPLAY**************************
     *********************************************************/
+    function clearCards() {
+        document.querySelector('.card-container').innerHTML = '';
+    }
+    
+    function clearStats() {
+        document.querySelector('.menu-stats').innerHTML = '';
+    }
+    
     function toggleRotation(el) {
         deselectList('nav__list-stats');
         deselectList('nav__list-classes');
+        document.querySelector('.input-search').value = '';
         el.classList.add('selected');
         
         document.querySelector('.nav__row-classes').style.display = 'flex';
@@ -183,63 +259,9 @@ let HSArenaInfo = (function() {
         document.querySelector('.nav__row-filters').style.display = 'none';        
     }
     
-    function toggleClass(el) {
+    function setClass(el) {
         deselectList('nav__list-classes');
         el.classList.add('selected');
-    }
-    
-    function toggleCost(mana, el) {
-        if (filter.cost === mana)
-            filter.cost = '';
-        else filter.cost = mana;
-        
-        if (deselectList('nav__list-cost') !== el)
-            el.classList.toggle('selected');
-    }
-    
-    function toggleType(type, el) {
-        if (filter.type === type)
-            filter.type = '';
-        else filter.type = type;
-        
-        if (deselectList('nav__list-type') !== el)
-            el.classList.toggle('selected');
-    }    
-    
-    function isCardIncluded(card) {
-        if (filter.cost !== '') {
-            if ((filter.cost !== 10 && card.cost !== filter.cost) || (filter.cost === 10 && card.cost < 10))
-                return false;
-        }
-        if (filter.type !== '') {
-            if (card.type !== filter.type)
-                return false;
-        }
-        return true;
-    }
-    /*********************************************************
-    *************************DISPLAY**************************
-    *********************************************************/
-    function clearCards() {
-        document.querySelector('.card-container').innerHTML = "";
-    }
-    
-    function clearStats() {
-        document.querySelector('.menu-stats').innerHTML = "";
-    }
-    
-    function clearFilter() {
-        filteredCardData = [];
-        
-        filter = {
-                cost: '',
-                type: '',
-                tribe: '',
-                keyword: ''
-        };
-        
-        deselectList('nav__list-type');
-        deselectList('nav__list-cost');
     }
     
     function deselectList(filterList) {
@@ -324,11 +346,7 @@ let HSArenaInfo = (function() {
         createArenaCardData();
         initEventListeners();
         document.querySelector('.version').style.opacity = '1';
-    }    
-    /*********************************************************
-    ************************COLLECTION************************
-    *********************************************************/
-
+    }
     /*********************************************************
     ***********************MAIN FUNCTION**********************
     *********************************************************/
