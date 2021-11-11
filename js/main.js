@@ -8,7 +8,7 @@ let HSArenaInfo = (function() {
     *********************************************************/
     let cardData; // Raw JSON data
     let arenaCardData = []; // Arena only data
-    let filteredCardData; // Arena data filtered by class/mechanic
+    let filteredCardData = []; // Arena data filtered by class/mechanic
     
     // Used for calculating stats/odds
     let totalStats;
@@ -22,6 +22,10 @@ let HSArenaInfo = (function() {
         keyword: '',
         search: ''
     };
+    
+    // Used for batch card display
+    let currentCard = 0;
+    const maxCards = 50;
 
     const version = 0.3;
     const rotation = ['CORE', 'GANGS', 'UNGORO', 'ICECROWN', 'DALARAN', 'BLACK_TEMPLE', 'STORMWIND'];
@@ -100,8 +104,7 @@ let HSArenaInfo = (function() {
             filteredCardData.push(card);
         }
     }
-    
-    // Menu event listeners
+
     function initEventListeners() {
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
             clearStats();
@@ -148,6 +151,14 @@ let HSArenaInfo = (function() {
                 displayCards();
             }
         });
+        
+        window.onscroll = function(ev) {
+            // Display additional cards when scrolling to the bottom of the page
+            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
+                let cost = document.querySelector('.menu-stats a.selected .menu-stats__cost');
+                cost === null ? displayCards() : displayCards(parseInt(cost.innerHTML));
+            }
+        };
     }
     /*********************************************************
     **********************LOCAL STORAGE***********************
@@ -233,6 +244,7 @@ let HSArenaInfo = (function() {
     *************************DISPLAY**************************
     *********************************************************/
     function clearCards() {
+        currentCard = 0;
         document.querySelector('.card-container').innerHTML = '';
     }
     
@@ -247,7 +259,7 @@ let HSArenaInfo = (function() {
         el.classList.add('selected');
         
         document.querySelector('.nav__row-classes').style.display = 'flex';
-        document.querySelector('.nav__row-filters').style.display = 'flex';        
+        document.querySelector('.nav__row-filters').style.display = 'flex';
     }
     
     function toggleStats(el) {
@@ -256,7 +268,7 @@ let HSArenaInfo = (function() {
         el.classList.add('selected');
         
         document.querySelector('.nav__row-classes').style.display = 'none';
-        document.querySelector('.nav__row-filters').style.display = 'none';        
+        document.querySelector('.nav__row-filters').style.display = 'none';
     }
     
     function setClass(el) {
@@ -275,16 +287,17 @@ let HSArenaInfo = (function() {
     function displayCards(cost) {
         let grid = document.querySelector('.card-container');
         
-        for (let c in filteredCardData) {
-            let card = filteredCardData[c];
-            
-            if (cost === undefined && !isCardIncluded(card))
+        for (let i = currentCard; i < currentCard + maxCards && i < filteredCardData.length; i++) {
+            let card = filteredCardData[i];
+
+            if (cost === undefined && !isCardIncluded(card) || cost !== undefined && card.cost !== cost) {
+                currentCard++;
                 continue;
-            else if (cost !== undefined && card.cost !== cost)
-                continue;
+            }
             
             grid.appendChild(createCardImage(card));
         }
+        currentCard += maxCards;
     }
     
     function createCardImage(card) {
@@ -331,6 +344,8 @@ let HSArenaInfo = (function() {
             ul.appendChild(li);
             
             li.addEventListener('click', function() {
+                deselectList('menu-stats');
+                a.classList.add('selected');
                 clearCards();
                 displayCards(parseInt(this.querySelector('div').innerHTML));
             });

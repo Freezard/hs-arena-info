@@ -135,7 +135,7 @@ ul {
 
 }
 
-.menu-stats a:hover {
+.menu-stats a:hover, .menu-stats a.selected {
   background: #d1cdcc;
 }
 
