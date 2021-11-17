@@ -7,7 +7,7 @@ https://freezard.github.io/hs-arena-info/
 - Browse the current arena pool and quickly search for specific cards
 - See helpful transform data (for example when evolving a minion)
   - Average minion attack/health for each mana pool
-  - Chances of a minion being taunt, rush etc
+  - Chances of a minion having taunt, rush etc
   - List all possibly minions to compare strengths for different mana pools
 
 ## USAGE
@@ -16,8 +16,7 @@ https://freezard.github.io/hs-arena-info/
 - Add card win and draft rates from HSReplay
 - Mark banned cards, add setting for hiding them
 - Remove duplicate non-core cards
-- Add more filters (tribe, rarity, spell school)
-- Add drop down for filters with many choices
+- Add more filters?
 - Add helpful arena sections?
 - Add news section?
 - Add current arena sets somewhere?
