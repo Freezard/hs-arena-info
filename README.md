@@ -1,5 +1,5 @@
 # HSArena Info
-A web app dedicated to Hearthstone Arena with helpful and nerdy info.
+A web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
 
 https://freezard.github.io/hs-arena-info/
  
@@ -8,14 +8,14 @@ https://freezard.github.io/hs-arena-info/
 - See helpful transform data (for example when evolving a minion)
   - Average minion attack/health for each mana pool
   - Chances of a minion having taunt, rush etc
-  - List all possibly minions to compare strengths for different mana pools
+  - List all possible minions to compare strengths for different mana pools
 
 ## USAGE
 
 ## PLANNED FEATURES
 - Add card win and draft rates from HSReplay
 - Mark banned cards, add setting for hiding them
-- Remove duplicate non-core cards
+- Remove duplicate non-Core cards
 - Add more filters?
 - Add helpful arena sections?
 - Add news section?
