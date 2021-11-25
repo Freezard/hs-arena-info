@@ -39,17 +39,18 @@
     <div class="nav__element">
       <span class="nav-list__header">&nbsp;</span>
       <ul class="nav__list nav__list-stats">
-        <li><a href="#" class="nav-list__button nav-list__button-average">Average Stats</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-average" data-json="AVERAGE">Average Stats</a></li>
       </ul>
     </div>
     <div class="nav__element nav__element-padding"></div>
     <div class="nav__element">
       <span class="nav-list__header">Transformation Odds</span>
       <ul class="nav__list nav__list-stats">
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Taunt</a></li>
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Lifesteal</a></li>
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Charge</a></li>
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Rush</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-standard" data-json="TAUNT">Taunt</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-standard" data-json="RUSH,CHARGE">Rush</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-standard" data-json="LIFESTEAL">Lifesteal</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-standard" data-json="CHARGE">Charge</a></li>
+        <li><a href="#" class="nav-list__button nav-list__button-standard" data-json="RUSH,CHARGE+LIFESTEAL">Rush + Lifesteal</a></li>
       </ul>
     </div> 
   </div>
@@ -73,12 +74,73 @@
     </div>
   </div>
   <div class="nav__row nav__row-filters">
-    <div class="nav__element">
-      <ul class="nav__list nav__list-type">
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Minion</a></li>
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Spell</a></li>
-        <li><a href="#" class="nav-list__button nav-list__button-standard">Weapon</a></li>
-      </ul>
+    <div class="nav__row">
+      <div class="nav__element">
+        <ul class="nav__list nav__list-type">
+          <li><a href="#" class="nav-list__button nav-list__button-standard">Minion</a></li>
+          <li><a href="#" class="nav-list__button nav-list__button-standard">Spell</a></li>
+          <li><a href="#" class="nav-list__button nav-list__button-standard">Weapon</a></li>
+        </ul>
+      </div>
+      <div class="nav__element nav__element-padding"></div>
+      <div class="nav__element">
+        <div class="dropdown">
+          <a href="#" class="nav-list__button nav-list__button-standard" data-name="race">Race</a>
+          <div class="dropdown-content">
+            <a href="#" class="selected">Any</a>
+            <a href="#">Beast</a>
+            <a href="#">Demon</a>
+            <a href="#">Dragon</a>
+            <a href="#">Elemental</a>
+            <a href="#">Mech</a>
+            <a href="#">Murloc</a>
+            <a href="#">Pirate</a>
+            <a href="#">Quillboar</a>
+            <a href="#">Totem</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav__element nav__element-padding"></div>
+      <div class="nav__element">
+        <div class="dropdown">
+          <a href="#" class="nav-list__button nav-list__button-standard" data-name="keyword">Keyword</a>
+          <div class="dropdown-content">
+            <a href="#" class="selected">Any</a>
+            <a href="#">Adapt</a>
+            <a href="#">Battlecry</a>
+            <a href="#">Charge</a>
+            <a href="#">Combo</a>
+            <a href="#">Corrupt</a>
+            <a href="#">Deathrattle</a>
+            <a href="#">Discover</a>
+            <a href="#">Divine Shield</a>
+            <a href="#">Freeze</a>
+            <a href="#">Frenzy</a>
+            <a href="#">Honorable Kill</a>
+            <a href="#">Immune</a>
+            <a href="#">Inspire</a>
+            <a href="#">Lifesteal</a>
+            <a href="#">Magnetic</a>
+            <a href="#">Outcast</a>
+            <a href="#">Overkill</a>
+            <a href="#">Overload</a>
+            <a href="#">Poisonous</a>
+            <a href="#">Reborn</a>
+            <a href="#">Recruit</a>
+            <a href="#">Rush</a>
+            <a href="#">Secret</a>
+            <a href="#">Sidequest</a>
+            <a href="#">Silence</a>
+            <a href="#">Spell Damage</a>
+            <a href="#">Spellburst</a>
+            <a href="#">Stealth</a>
+            <a href="#">Taunt</a>
+            <a href="#">Tradeable</a>
+            <a href="#">Twinspell</a>
+            <a href="#">Windfury</a>
+          </div>
+        </div>
+      </div>      
     </div>
     <div class="nav__element">
       <ul class="nav__list nav__list-cost">
@@ -95,8 +157,38 @@
         <li><a href="#" class="nav-list__button">10</a></li>
       </ul>
     </div>
-    <div class="nav__element">
-      <input type="text" class="input-search" placeholder="Search" minlength="3" maxlength=30">
+    <div class="nav__row">
+      <div class="nav__element">
+        <input type="text" class="input-search" placeholder="Search" minlength="3" maxlength=30">
+      </div>
+      <div class="nav__element">
+        <div class="dropdown">
+          <a href="#" class="nav-list__button nav-list__button-standard" data-name="rarity">Rarity</a>
+          <div class="dropdown-content">
+            <a href="#" class="selected">Any</a>
+            <a href="#">Common</a>
+            <a href="#">Rare</a>
+            <a href="#">Epic</a>
+            <a href="#">Legendary</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav__element nav__element-padding"></div>
+      <div class="nav__element">
+        <div class="dropdown">
+          <a href="#" class="nav-list__button nav-list__button-standard" data-name="school">School</a>
+          <div class="dropdown-content">
+            <a href="#" class="selected">Any</a>
+            <a href="#">Arcane</a>
+            <a href="#">Fel</a>
+            <a href="#">Fire</a>
+            <a href="#">Frost</a>
+            <a href="#">Holy</a>
+            <a href="#">Nature</a>
+            <a href="#">Shadow</a>
+          </div>
+        </div>
+      </div>      
     </div>
   </div>
 </nav>

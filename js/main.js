@@ -18,26 +18,30 @@ let HSArenaInfo = (function() {
     let filter = {
         cost: '',
         type: '',
-        tribe: '',
+        race: '',
         keyword: '',
+        rarity: '',
+        school: '',
         search: ''
     };
     
     // Used for batch card display
     let currentCard = 0;
-    const maxCards = 50;
+    const maxCards = screen.height > 1080 ? 100 : 50;
 
     const version = 0.3;
     const rotation = ['CORE', 'GANGS', 'UNGORO', 'ICECROWN', 'DALARAN', 'BLACK_TEMPLE', 'STORMWIND'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
-        BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND
+        BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND,ALTERAC_VALLEY
     */
     /*********************************************************
     **************************UTILS***************************
     *********************************************************/
-    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
     /*********************************************************
     **************************INIT****************************
     *********************************************************/
@@ -71,19 +75,24 @@ let HSArenaInfo = (function() {
         }
     }
     
-    // Create filtered data used when viewing stats
-    // type = AVERAGE or any mechanic (TAUNT, RUSH etc)
+    /* Create filtered data used when viewing transformation stats
+       type = AVERAGE or any mechanic (TAUNT, RUSH etc)
+       Can contain multiple mechanics in a sequence like RUSH,CHARGE+LIFESTEAL,WINDFURY
+       This means any card that has either RUSH OR CHARGE as well as LIFESTEAL AND WINDFURY
+    */
     function createfilteredCardData(type) {
         filteredCardData = [];
         totalStats = {};
         totalMinions = {};
+        let any = type.split('+')[0].split(',');
+        let all = type.split('+')[1] !== undefined ? type.split('+')[1].split(',') : [];
         
         for (let c in arenaCardData) {
             let card = arenaCardData[c];
 
             if (card.type !== 'MINION')
                 continue;
-            
+
             if (totalMinions[card.cost] === undefined)
                 totalMinions[card.cost] = 0;
             totalMinions[card.cost]++;
@@ -93,7 +102,12 @@ let HSArenaInfo = (function() {
                     totalStats[card.cost] = { attack: 0, health: 0 };
                 totalStats[card.cost].attack += card.attack;
                 totalStats[card.cost].health += card.health;
-            } else if (card.mechanics !== undefined && card.mechanics.includes(type)) {
+            } else if (card.mechanics !== undefined) {
+                if ((!any.some(x => card.mechanics.indexOf(x) >= 0 && all.every(x => card.mechanics.indexOf(x) >= 0))))
+                    continue;
+                else if (card.text !== undefined && card.text.startsWith('<b>Dormant</b>')) // Also add can't attack?
+                    continue;
+                    
                 if (totalStats[card.cost] === undefined)
                     totalStats[card.cost] = { attack: 0, health: 0, minions: 0 };
                 totalStats[card.cost].attack += card.attack;
@@ -115,7 +129,7 @@ let HSArenaInfo = (function() {
         
         document.querySelectorAll('.nav__list-stats a').forEach(e => 
             e.addEventListener('click', function() {
-                let type = this.innerHTML.split(' ')[0].toUpperCase();
+                let type = this.getAttribute('data-json');
                 createfilteredCardData(type);
                 createStatsMenu(type);
                 toggleStats(this);
@@ -146,11 +160,56 @@ let HSArenaInfo = (function() {
             
         document.querySelector('.input-search').addEventListener('input', function() {
             if (!this.validity.tooShort) {
-                setSearch(this.value);
+                if (filteredCardData.length === 0) {
+                setClass(document.querySelector('[data-json="ALL"]'));
+                    createClassCardData('ALL');
+                }
+                setFilter('search', this.value);
                 clearCards();
                 displayCards();
             }
         });
+        
+        document.querySelectorAll('.dropdown').forEach(e => 
+            e.addEventListener('click', function() {
+                let active = e.classList.contains('active');
+                hideActiveDropdowns(e);
+                if (!active) {
+                    e.classList.add('active');
+                    e.querySelector('.dropdown-content').style.display = 'block';
+                }
+            }));
+            
+        document.querySelectorAll('.dropdown-content a').forEach(e => 
+            e.addEventListener('click', function() {
+                let dropdownButton = e.parentNode.previousElementSibling;
+                let filterName = dropdownButton.getAttribute('data-name');
+                let selected = e.classList.contains('selected');
+                
+                e.parentNode.querySelector('a.selected').classList.remove('selected');
+                
+                if (e.innerHTML === 'Any' || selected) {
+                    setFilter(filterName, '');
+                    dropdownButton.classList.remove('selected');
+                    dropdownButton.innerHTML = capitalizeFirstLetter(filterName);
+                    e.parentNode.querySelector('a').classList.add('selected');
+                } else {
+                    setFilter(filterName, e.innerHTML.toUpperCase().replace(/ /g,'_'));
+                    dropdownButton.classList.add('selected');
+                    dropdownButton.innerHTML = e.innerHTML;
+                    e.classList.add('selected');
+                }
+                
+                clearCards();
+                displayCards();
+            }));
+            
+        window.onclick = function(ev) {
+            let dropdown = ev.target.parentNode;
+            
+            if (dropdown.classList === undefined || !dropdown.classList.contains('dropdown'))
+                hideActiveDropdowns();
+        };
         
         window.onscroll = function(ev) {
             // Display additional cards when scrolling to the bottom of the page
@@ -201,24 +260,23 @@ let HSArenaInfo = (function() {
             el.classList.toggle('selected');
     }
     
-    function setSearch(input) {
-        filter.search = input;
+    function setFilter(type, value) {
+        if (filter[type] === value)
+            filter[type] = '';
+        else filter[type] = value;
     }
     
     function clearFilter() {
         filteredCardData = [];
         
-        filter = {
-                cost: '',
-                type: '',
-                tribe: '',
-                keyword: '',
-                search: ''
-        };
+        for (let value in filter)
+            filter[value] = '';
         
         deselectList('nav__list-type');
         deselectList('nav__list-cost');
-    }    
+        deselectDropdowns();
+        document.querySelector('.input-search').value = '';
+    }
     
     function isCardIncluded(card) {
         if (filter.cost !== '') {
@@ -227,6 +285,30 @@ let HSArenaInfo = (function() {
         }
         if (filter.type !== '') {
             if (filter.type !== card.type)
+                return false;
+        }
+        if (filter.race !== '') {
+            if (filter.race !== card.race)
+                return false;
+        }
+        if (filter.rarity !== '') {
+            if (filter.rarity !== card.rarity)
+                return false;
+        }
+        if (filter.school !== '') {
+            if (filter.school !== card.spellSchool)
+                return false;
+        }
+        if (filter.keyword !== '') {
+            let keyword = filter.keyword;
+            let mechanics = card.mechanics;
+            let tags = card.referencedTags;
+            
+            if (keyword === 'SPELL_DAMAGE' && card.spellDamage === undefined)
+                return false;
+            else if (keyword !== 'SPELL_DAMAGE' &&
+                (mechanics === undefined || (mechanics !== undefined && !mechanics.includes(keyword))) &&
+                (tags === undefined || (tags !== undefined && !tags.includes(keyword))))
                 return false;
         }
         if (filter.search !== '') {
@@ -255,7 +337,6 @@ let HSArenaInfo = (function() {
     function toggleRotation(el) {
         deselectList('nav__list-stats');
         deselectList('nav__list-classes');
-        document.querySelector('.input-search').value = '';
         el.classList.add('selected');
         
         document.querySelector('.nav__row-classes').style.display = 'flex';
@@ -282,6 +363,32 @@ let HSArenaInfo = (function() {
             selected.classList.remove('selected');
         
         return selected;
+    }
+    
+    function deselectDropdowns() {
+        document.querySelectorAll('.dropdown-content a').forEach(e => {
+            let dropdownButton = e.parentNode.previousElementSibling;
+            let filterName = dropdownButton.getAttribute('data-name');
+                
+            dropdownButton.classList.remove('selected');
+            dropdownButton.innerHTML = capitalizeFirstLetter(filterName);
+                
+            e.parentNode.querySelectorAll('a').forEach(e => {
+                e.classList.remove('selected');
+            });
+            
+            // Set first option as selected
+            e.parentNode.querySelector('a').classList.add('selected');
+        });
+    }
+    
+    function hideActiveDropdowns() {
+        let dropdown = document.querySelector('.dropdown.active');
+        
+        if (dropdown !== null) {
+            dropdown.classList.remove('active');
+            dropdown.querySelector('.dropdown-content').style.display = 'none';
+        }
     }
     
     function displayCards(cost) {
