@@ -47,40 +47,42 @@ let HSArenaInfo = (function() {
     *********************************************************/
     // Create arena only data and sort it by cost
     function createArenaCardData() {
-        for (let c in cardData) {
-            let card = cardData[c];
-            
-            if (rotation.includes(card.set) && !card.id.includes('HERO'))
-                arenaCardData.push(card);
-        }
+        arenaCardData = cardData.filter(card => 
+            rotation.includes(card.set) && !card.id.includes('HERO'));
         
         arenaCardData.sort(function(a, b) {
-                return a.cost === b.cost ?
-                       a.name.localeCompare(b.name) :
-                       a.cost - b.cost;
+            return a.cost === b.cost ?
+                   a.name.localeCompare(b.name) :
+                   a.cost - b.cost;
+        });
+        
+        // Remove duplicates that exist in both Core and their own set
+        arenaCardData = arenaCardData.filter((card, index) => {
+            let nextCard = arenaCardData[index + 1];
+            let previousCard = arenaCardData[index - 1];
+            
+            if (nextCard !== undefined && card.name === nextCard.name && card.set !== 'CORE')
+                return false;
+            else if (previousCard !== undefined && card.name === previousCard.name && card.set !== 'CORE')
+                return false;
+            else return true;
         });
     }
     
     // Create class data used when viewing all arena cards
     function createClassCardData(cardClass) {
-        filteredCardData = [];
-        
-        for (let c in arenaCardData) {
-            let card = arenaCardData[c];
-            
-            if (cardClass === 'ALL' ||
-               (card.cardClass === cardClass && card.classes === undefined) ||
-               (card.classes !== undefined && card.classes.includes(cardClass)))
-                filteredCardData.push(card);
-        }
+        filteredCardData = arenaCardData.filter(card => 
+            cardClass === 'ALL' ||
+            (card.cardClass === cardClass && card.classes === undefined) ||
+            (card.classes !== undefined && card.classes.includes(cardClass)));
     }
     
-    /* Create filtered data used when viewing transformation stats
+    /* Create data used when viewing transformation stats
        type = AVERAGE or any mechanic (TAUNT, RUSH etc)
        Can contain multiple mechanics in a sequence like RUSH,CHARGE+LIFESTEAL,WINDFURY
        This means any card that has either RUSH OR CHARGE as well as LIFESTEAL AND WINDFURY
     */
-    function createfilteredCardData(type) {
+    function createStatsCardData(type) {
         filteredCardData = [];
         totalStats = {};
         totalMinions = {};
@@ -130,7 +132,7 @@ let HSArenaInfo = (function() {
         document.querySelectorAll('.nav__list-stats a').forEach(e => 
             e.addEventListener('click', function() {
                 let type = this.getAttribute('data-json');
-                createfilteredCardData(type);
+                createStatsCardData(type);
                 createStatsMenu(type);
                 toggleStats(this);
                 clearCards();
