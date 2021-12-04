@@ -15,8 +15,8 @@ https://freezard.github.io/hs-arena-info/
 ## PLANNED FEATURES
 - Add card win and draft rates from HSReplay
 - Mark banned cards, add setting for hiding them
-- Remove duplicate non-Core cards
+- Add discover odds
 - Add more filters?
 - Add helpful arena sections?
 - Add news section?
-- Add current arena sets somewhere?
+- Display current arena sets somewhere?
