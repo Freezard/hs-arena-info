@@ -29,8 +29,8 @@ let HSArenaInfo = (function() {
     let currentCard = 0;
     const maxCards = screen.height > 1080 ? 100 : 50;
 
-    const version = 0.3;
-    const rotation = ['CORE', 'GANGS', 'UNGORO', 'ICECROWN', 'DALARAN', 'BLACK_TEMPLE', 'STORMWIND'];
+    const version = 0.4;
+    const rotation = ['CORE', 'LOE', 'LOOTAPALOOZA', 'BOOMSDAY', 'ULDUM', 'SCHOLOMANCE', 'ALTERAC_VALLEY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
@@ -412,12 +412,11 @@ let HSArenaInfo = (function() {
     function createCardImage(card) {
         let div = document.createElement('div');
         let img = document.createElement('img');
-        /*img.setAttribute('src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
-            averagearenaCardData[card].id + '.png');*/
-        img.setAttribute('src', 'images-cards/' + card.id + '.png');
+        img.setAttribute('src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
+            card.id + '.png');
         img.setAttribute('alt', card.name);
         img.setAttribute('width', '256');
-        img.setAttribute('height', '387');
+        img.setAttribute('height', '388');
         img.setAttribute('loading', 'lazy');
         div.appendChild(img);
         
