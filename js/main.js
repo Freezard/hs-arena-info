@@ -290,7 +290,9 @@ let HSArenaInfo = (function() {
                 return false;
         }
         if (filter.race !== '') {
-            if (filter.race !== card.race)
+            if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
+                return false;
+            else if (filter.race !== 'MECH' && filter.race !== card.race)
                 return false;
         }
         if (filter.rarity !== '') {
