@@ -24,10 +24,6 @@ let HSArenaInfo = (function() {
         school: '',
         search: ''
     };
-    
-    // Used for batch card display
-    let currentCard = 0;
-    const maxCards = screen.height > 1080 ? 100 : 50;
 
     const version = 0.4;
     const rotation = ['CORE', 'LOE', 'LOOTAPALOOZA', 'BOOMSDAY', 'ULDUM', 'SCHOLOMANCE', 'ALTERAC_VALLEY'];
@@ -212,14 +208,6 @@ let HSArenaInfo = (function() {
             if (dropdown.classList === undefined || !dropdown.classList.contains('dropdown'))
                 hideActiveDropdowns();
         };
-        
-        window.onscroll = function(ev) {
-            // Display additional cards when scrolling to the bottom of the page
-            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
-                let cost = document.querySelector('.menu-stats a.selected .menu-stats__cost');
-                cost === null ? displayCards() : displayCards(parseInt(cost.innerHTML));
-            }
-        };
     }
     /*********************************************************
     **********************LOCAL STORAGE***********************
@@ -290,9 +278,9 @@ let HSArenaInfo = (function() {
                 return false;
         }
         if (filter.race !== '') {
-            if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
+            if (filter.race !== 'MECH' && filter.race !== card.race)
                 return false;
-            else if (filter.race !== 'MECH' && filter.race !== card.race)
+            else if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
                 return false;
         }
         if (filter.rarity !== '') {
@@ -395,31 +383,38 @@ let HSArenaInfo = (function() {
         }
     }
     
+    // Cost is only used when displaying odds
     function displayCards(cost) {
         let grid = document.querySelector('.card-container');
         
-        for (let i = currentCard; i < currentCard + maxCards && i < filteredCardData.length; i++) {
-            let card = filteredCardData[i];
-
-            if (cost === undefined && !isCardIncluded(card) || cost !== undefined && card.cost !== cost) {
-                currentCard++;
+        // Only load images when they are in the viewport
+        const observer = new IntersectionObserver((items, observer) => {
+            items.forEach((item) => {
+                if(item.isIntersecting) {
+                    item.target.setAttribute('src', item.target.getAttribute('data-src'));
+                    observer.unobserve(item.target);
+                }
+            });
+        });
+        
+        for (let card of filteredCardData) {
+            if (cost === undefined && !isCardIncluded(card) || cost !== undefined && card.cost !== cost)
                 continue;
-            }
             
-            grid.appendChild(createCardImage(card));
+            let cardImage = createCardImage(card)
+            observer.observe(cardImage.querySelector('img'));
+            grid.appendChild(cardImage);
         }
-        currentCard += maxCards;
     }
     
     function createCardImage(card) {
         let div = document.createElement('div');
         let img = document.createElement('img');
-        img.setAttribute('src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
+        img.setAttribute('data-src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
             card.id + '.png');
         img.setAttribute('alt', card.name);
         img.setAttribute('width', '256');
         img.setAttribute('height', '388');
-        img.setAttribute('loading', 'lazy');
         div.appendChild(img);
         
         return div;
