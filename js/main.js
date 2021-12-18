@@ -318,7 +318,6 @@ let HSArenaInfo = (function() {
     *************************DISPLAY**************************
     *********************************************************/
     function clearCards() {
-        currentCard = 0;
         document.querySelector('.card-container').innerHTML = '';
     }
     
