@@ -120,8 +120,7 @@ let HSArenaInfo = (function() {
     
     // Get win and draft rates from HSReplay.net and create object
     async function createWinDraftRates() {
-        //DEV const url = 'https://cors-anywhere.herokuapp.com/https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
-        const url = 'https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
+        const url = 'https://cors-anywhere.herokuapp.com/https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
         
         try {
             let request = await fetch(url);
