@@ -421,13 +421,15 @@ let HSArenaInfo = (function() {
             if (cost === undefined && !isCardIncluded(card) || cost !== undefined && card.cost !== cost)
                 continue;
             
-            let cardImage = createCardImage(card)
-            observer.observe(cardImage.querySelector('img'));
-            grid.appendChild(cardImage);
+            let cardDiv = createCardDiv(card, cost)
+            observer.observe(cardDiv.querySelector('img'));
+            grid.appendChild(cardDiv);
         }
     }
     
-    function createCardImage(card) {
+    // Creates the card div containing the image and win/draft rates
+    // If rates is undefined, don't create the rates bar
+    function createCardDiv(card, rates) {
         let div = document.createElement('div');
         let img = document.createElement('img');
         img.setAttribute('data-src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
@@ -437,40 +439,48 @@ let HSArenaInfo = (function() {
         img.setAttribute('height', '388');
         div.appendChild(img);
         
-        let div2 = document.createElement('div');
-        div2.classList.add('card-stats');
+        if (rates === undefined)
+            div.appendChild(createRatesBar(card));
+        
+        return div;
+    }
+    
+    // Creates the win/draft rates bar
+    function createRatesBar(card) {
+        let div = document.createElement('div');
+        div.classList.add('card-stats');
         
         let stats = winDraftRates[card.dbfId];
         let winRate = stats ? Math.round(winDraftRates[card.dbfId].included_winrate * 10) / 10 : 'N/A';
         let draftRate = stats ? Math.round(winDraftRates[card.dbfId].included_popularity * 10) / 10 : 'N/A';
         
-        let div3 = document.createElement('div');
-        div3.setAttribute('title', 'Deck win rate');
-        div3.innerHTML = stats ? winRate + '%' : 'N/A';
+        let div2 = document.createElement('div');
+        div2.setAttribute('title', 'Deck win rate');
+        div2.innerHTML = stats ? winRate + '%' : 'N/A';
         if (winRate < 49 )
-            div3.classList.add('card-stats--negative');
+            div2.classList.add('card-stats--negative');
         else if (winRate >= 49 && winRate < 51 )
-            div3.classList.add('card-stats--neutral');
+            div2.classList.add('card-stats--neutral');
         else if (winRate >= 51)
+            div2.classList.add('card-stats--positive');
+        
+        let div3 = document.createElement('div');
+        div3.setAttribute('title', 'Draft rate');
+        div3.innerHTML = stats ? draftRate + '%' : 'N/A';
+        if (draftRate < 10 )
+            div3.classList.add('card-stats--negative');
+        else if (draftRate >= 10 && draftRate < 30 )
+            div3.classList.add('card-stats--neutral');
+        else if (draftRate >= 30)
             div3.classList.add('card-stats--positive');
         
-        let div4 = document.createElement('div');
-        div4.setAttribute('title', 'Draft rate');
-        div4.innerHTML = stats ? draftRate + '%' : 'N/A';
-        if (draftRate < 10 )
-            div4.classList.add('card-stats--negative');
-        else if (draftRate >= 10 && draftRate < 30 )
-            div4.classList.add('card-stats--neutral');
-        else if (draftRate >= 30)
-            div4.classList.add('card-stats--positive');
-        
-        div2.appendChild(div3);
-        div2.appendChild(div4);
         div.appendChild(div2);
+        div.appendChild(div3);
         
         return div;
     }
     
+    // Creates the stats menu used for averages/odds
     function createStatsMenu(type) {
         let ul = document.querySelector('.menu-stats');
         ul.innerHTML = '';
