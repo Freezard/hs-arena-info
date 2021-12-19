@@ -5,6 +5,7 @@ https://freezard.github.io/hs-arena-info/
  
 ## FEATURES
 - Browse the current arena pool and quickly search for specific cards
+- Card win and draft rates shows off which cards are doing well and which ones to play around
 - See helpful transform data (for example when evolving a minion)
   - Average minion attack/health for each mana pool
   - Chances of a minion having taunt, rush etc
@@ -13,10 +14,10 @@ https://freezard.github.io/hs-arena-info/
 ## USAGE
 
 ## PLANNED FEATURES
-- Add card win and draft rates from HSReplay
 - Mark banned cards, add setting for hiding them
 - Add discover odds
+- Add helpful arena sections (eg secrets)?
+- Display current arena sets?
 - Add more filters?
-- Add helpful arena sections?
+- Add customized transformation odds?
 - Add news section?
-- Display current arena sets somewhere?
