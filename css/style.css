@@ -186,13 +186,35 @@ ul {
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-auto-rows: 212px;
+  grid-auto-rows: 252px;
 }
 
 .card-container > div > img {
   width: 100%;
-  height: 100%;
+  height: 212px;
   object-fit: cover;
+}
+
+.card-container .card-stats {
+  display: flex;
+  justify-content: space-evenly;
+  border: 3px solid #fbfbff;
+}
+
+.card-stats > div {
+  padding: 2px;
+}
+
+.card-stats--negative {
+  color: #d9603b;
+}
+
+.card-stats--neutral {
+  color: #b5a642;
+}
+
+.card-stats--positive {
+  color: #8fbc8f;
 }
 
 /* TODO: REMOVE (Bootstrap leftover)*/
@@ -207,7 +229,7 @@ ul {
 .header {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;    
+  justify-content: center;
   background-color: #5d3707; /*432100*/
   margin-bottom: 25px;
   padding: 0 0 3px 0;

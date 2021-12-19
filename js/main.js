@@ -9,6 +9,7 @@ let HSArenaInfo = (function() {
     let cardData; // Raw JSON data
     let arenaCardData = []; // Arena only data
     let filteredCardData = []; // Arena data filtered by class/mechanic
+    let winDraftRates = {};
     
     // Used for calculating stats/odds
     let totalStats;
@@ -114,6 +115,27 @@ let HSArenaInfo = (function() {
             } else continue;
 
             filteredCardData.push(card);
+        }
+    }
+    
+    // Get win and draft rates from HSReplay.net and create object
+    async function createWinDraftRates() {
+        //DEV const url = 'https://cors-anywhere.herokuapp.com/https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
+        const url = 'https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
+        
+        try {
+            let request = await fetch(url);
+            let data = await request.json();
+            for (let HSClass in data.series.data)
+                for (let card of data.series.data[HSClass])
+                    if (!winDraftRates.hasOwnProperty(card.dbf_id))
+                        winDraftRates[card.dbf_id] = {
+                            included_winrate : card.included_winrate,
+                            included_popularity : card.included_popularity
+                        }
+        }
+        catch (error) {
+            console.log(error);
         }
     }
 
@@ -416,6 +438,37 @@ let HSArenaInfo = (function() {
         img.setAttribute('height', '388');
         div.appendChild(img);
         
+        let div2 = document.createElement('div');
+        div2.classList.add('card-stats');
+        
+        let stats = winDraftRates[card.dbfId];
+        let winRate = stats ? Math.round(winDraftRates[card.dbfId].included_winrate * 10) / 10 : 'N/A';
+        let draftRate = stats ? Math.round(winDraftRates[card.dbfId].included_popularity * 10) / 10 : 'N/A';
+        
+        let div3 = document.createElement('div');
+        div3.setAttribute('title', 'Deck win rate');
+        div3.innerHTML = stats ? winRate + '%' : 'N/A';
+        if (winRate < 49 )
+            div3.classList.add('card-stats--negative');
+        else if (winRate >= 49 && winRate < 51 )
+            div3.classList.add('card-stats--neutral');
+        else if (winRate >= 51)
+            div3.classList.add('card-stats--positive');
+        
+        let div4 = document.createElement('div');
+        div4.setAttribute('title', 'Draft rate');
+        div4.innerHTML = stats ? draftRate + '%' : 'N/A';
+        if (draftRate < 10 )
+            div4.classList.add('card-stats--negative');
+        else if (draftRate >= 10 && draftRate < 30 )
+            div4.classList.add('card-stats--neutral');
+        else if (draftRate >= 30)
+            div4.classList.add('card-stats--positive');
+        
+        div2.appendChild(div3);
+        div2.appendChild(div4);
+        div.appendChild(div2);
+        
         return div;
     }
     
@@ -459,12 +512,14 @@ let HSArenaInfo = (function() {
     **********************HTML TEMPLATES**********************
     *********************************************************/
     function displayMain() {
-        let template = document.getElementById('template-stats').innerHTML;
-        document.querySelector('.container').innerHTML = template;
-        
-        createArenaCardData();
-        initEventListeners();
         document.querySelector('.version').style.opacity = '1';
+        
+        createWinDraftRates().then(() => {
+            let template = document.getElementById('template-stats').innerHTML;
+            document.querySelector('.container').innerHTML = template;
+            createArenaCardData();
+            initEventListeners();
+        });
     }
     /*********************************************************
     ***********************MAIN FUNCTION**********************
