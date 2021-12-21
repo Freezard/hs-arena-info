@@ -120,7 +120,7 @@ let HSArenaInfo = (function() {
     
     // Get win and draft rates from HSReplay.net and create object
     async function createWinDraftRates() {
-        const url = 'https://cors-anywhere.herokuapp.com/https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
+        const url = 'https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
         
         try {
             let request = await fetch(url);
@@ -421,7 +421,7 @@ let HSArenaInfo = (function() {
         let grid = document.querySelector('.card-container');
         
         // Get rid of vertical gap when viewing odds
-        if (cost === undefined)
+        if (cost === undefined && Object.keys(winDraftRates).length !== 0)
             grid.style.gridAutoRows = '242px';
         else grid.style.gridAutoRows = '212px';
         
@@ -457,7 +457,7 @@ let HSArenaInfo = (function() {
         img.setAttribute('height', '388');
         div.appendChild(img);
         
-        if (cost === undefined)
+        if (cost === undefined && Object.keys(winDraftRates).length !== 0)
             div.appendChild(createRatesBar(card));
         
         return div;
