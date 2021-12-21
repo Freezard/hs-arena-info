@@ -125,13 +125,26 @@ let HSArenaInfo = (function() {
         try {
             let request = await fetch(url);
             let data = await request.json();
-            for (let HSClass in data.series.data)
+            for (let HSClass in data.series.data) {
+                if (winDraftRates[HSClass] === undefined)
+                    if (HSClass === 'ALL')
+                        winDraftRates.NEUTRAL = {};
+                    else winDraftRates[HSClass] = {};
+                
                 for (let card of data.series.data[HSClass])
-                    if (!winDraftRates.hasOwnProperty(card.dbf_id))
-                        winDraftRates[card.dbf_id] = {
+                    if (HSClass === 'ALL')
+                        winDraftRates.NEUTRAL[card.dbf_id] =
+                        {
                             included_winrate : card.included_winrate,
                             included_popularity : card.included_popularity
                         }
+                    else winDraftRates[HSClass][card.dbf_id] =
+                         {
+                             included_winrate : card.included_winrate,
+                             included_popularity : card.included_popularity
+                         }
+            }
+            console.log(winDraftRates);
         }
         catch (error) {
             console.log(error);
@@ -407,6 +420,11 @@ let HSArenaInfo = (function() {
     function displayCards(cost) {
         let grid = document.querySelector('.card-container');
         
+        // Get rid of vertical gap when viewing odds
+        if (cost === undefined)
+            grid.style.gridAutoRows = '242px';
+        else grid.style.gridAutoRows = '212px';
+        
         // Only load images when they are in the viewport
         const observer = new IntersectionObserver((items, observer) => {
             items.forEach((item) => {
@@ -428,8 +446,8 @@ let HSArenaInfo = (function() {
     }
     
     // Creates the card div containing the image and win/draft rates
-    // If rates is undefined, don't create the rates bar
-    function createCardDiv(card, rates) {
+    // If cost is undefined, create the rates bar
+    function createCardDiv(card, cost) {
         let div = document.createElement('div');
         let img = document.createElement('img');
         img.setAttribute('data-src', 'https://art.hearthstonejson.com/v1/render/latest/enUS/256x/' +
@@ -439,7 +457,7 @@ let HSArenaInfo = (function() {
         img.setAttribute('height', '388');
         div.appendChild(img);
         
-        if (rates === undefined)
+        if (cost === undefined)
             div.appendChild(createRatesBar(card));
         
         return div;
@@ -450,13 +468,20 @@ let HSArenaInfo = (function() {
         let div = document.createElement('div');
         div.classList.add('card-stats');
         
-        let stats = winDraftRates[card.dbfId];
-        let winRate = stats ? Math.round(winDraftRates[card.dbfId].included_winrate * 10) / 10 : 'N/A';
-        let draftRate = stats ? Math.round(winDraftRates[card.dbfId].included_popularity * 10) / 10 : 'N/A';
+        let cardStats;
+        let currentClass = document.querySelector('.nav__list-classes a.selected');
+        
+        // Make sure multi-class cards get the right data if relevant class is selected
+        if (card.classes !== undefined && currentClass !== undefined && currentClass.getAttribute('data-json') !== 'ALL')
+            cardStats = winDraftRates[currentClass.getAttribute('data-json')][card.dbfId];
+        else cardStats = winDraftRates[card.cardClass][card.dbfId];
+        
+        let winRate = cardStats ? Math.round(cardStats.included_winrate * 10) / 10 : 'N/A';
+        let draftRate = cardStats ? Math.round(cardStats.included_popularity * 10) / 10 : 'N/A';
         
         let div2 = document.createElement('div');
         div2.setAttribute('title', 'Deck win rate');
-        div2.innerHTML = stats ? winRate + '%' : 'N/A';
+        div2.innerHTML = cardStats ? winRate + '%' : 'N/A';
         if (winRate < 49 )
             div2.classList.add('card-stats--negative');
         else if (winRate >= 49 && winRate < 51 )
@@ -466,7 +491,7 @@ let HSArenaInfo = (function() {
         
         let div3 = document.createElement('div');
         div3.setAttribute('title', 'Draft rate');
-        div3.innerHTML = stats ? draftRate + '%' : 'N/A';
+        div3.innerHTML = cardStats ? draftRate + '%' : 'N/A';
         if (draftRate < 10 )
             div3.classList.add('card-stats--negative');
         else if (draftRate >= 10 && draftRate < 30 )
