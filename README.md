@@ -1,7 +1,7 @@
 # HSArena Info
 A web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
 
-https://freezard.github.io/hs-arena-info/
+https://hs-arena-info.herokuapp.com/
  
 ## FEATURES
 - Browse the current arena pool and quickly search for specific cards
