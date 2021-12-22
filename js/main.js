@@ -26,7 +26,7 @@ let HSArenaInfo = (function() {
         search: ''
     };
 
-    const version = 0.4;
+    const version = 1.0;
     const rotation = ['CORE', 'LOE', 'LOOTAPALOOZA', 'BOOMSDAY', 'ULDUM', 'SCHOLOMANCE', 'ALTERAC_VALLEY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
@@ -120,11 +120,10 @@ let HSArenaInfo = (function() {
     
     // Get win and draft rates from HSReplay.net and create object
     async function createWinDraftRates() {
-        const url = 'https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=LAST_14_DAYS';
-        
         try {
-            let request = await fetch(url);
+            let request = await fetch('/cardRates');
             let data = await request.json();
+            
             for (let HSClass in data.series.data) {
                 if (winDraftRates[HSClass] === undefined)
                     if (HSClass === 'ALL')
@@ -144,7 +143,6 @@ let HSArenaInfo = (function() {
                              included_popularity : card.included_popularity
                          }
             }
-            console.log(winDraftRates);
         }
         catch (error) {
             console.log(error);
@@ -252,10 +250,8 @@ let HSArenaInfo = (function() {
     *********************************************************/
     // Get card data from Hearthstone API
     async function getCardData() {
-        const url = 'https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json';
-        
         try {
-            let request = await fetch(url);
+            let request = await fetch('/cardData');
             let arenaCardData = await request.json();
             return arenaCardData;
         }
