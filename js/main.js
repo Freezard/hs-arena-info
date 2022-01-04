@@ -304,8 +304,13 @@ let HSArenaInfo = (function() {
                 return false;
         }
         if (filter.type !== '') {
-            if (filter.type !== card.type)
+            if (filter.type !== 'SECRET' && filter.type !== card.type)
                 return false;
+            else if (filter.type === 'SECRET')
+                if (card.text !== undefined && !card.text.startsWith('<b>Secret:</b>'))
+                    return false;
+                else if (card.text === undefined)
+                    return false;
         }
         if (filter.race !== '') {
             if (filter.race !== 'MECH' && filter.race !== card.race)
