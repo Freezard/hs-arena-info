@@ -2,6 +2,8 @@
 A web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
 
 https://hs-arena-info.herokuapp.com/
+
+
  
 ## FEATURES
 - Browse the current arena pool and quickly search for specific cards
@@ -12,6 +14,13 @@ https://hs-arena-info.herokuapp.com/
   - List all possible minions to compare strengths for different mana pools
 
 ## USAGE
+![Site overview](images/readme/rotation.jpg)
+The default view (Current Cards button) shows the current arena cards. Click on a class and use the filters for more detailed results. Filters include card cost, type, race and so on. You can also search for specific card names or texts.
+
+![Site overview](images/readme/odds.jpg)
+
+![Site overview](images/readme/card.jpg)
+
 
 ## PLANNED FEATURES
 - Mark banned cards, add setting for hiding them
