@@ -26,7 +26,7 @@ let HSArenaInfo = (function() {
         search: ''
     };
 
-    const version = 1.0;
+    const version = 1.01;
     const rotation = ['CORE', 'LOE', 'LOOTAPALOOZA', 'BOOMSDAY', 'ULDUM', 'SCHOLOMANCE', 'ALTERAC_VALLEY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
