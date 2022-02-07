@@ -23,7 +23,8 @@ let HSArenaInfo = (function() {
         keyword: '',
         rarity: '',
         school: '',
-        search: ''
+        search: '',
+        discover: false
     };
 
     const version = 1.01;
@@ -70,6 +71,7 @@ let HSArenaInfo = (function() {
     function createClassCardData(cardClass) {
         filteredCardData = arenaCardData.filter(card => 
             cardClass === 'ALL' ||
+            (filter.discover && card.cardClass === 'NEUTRAL' && card.classes === undefined) ||
             (card.cardClass === cardClass && card.classes === undefined) ||
             (card.classes !== undefined && card.classes.includes(cardClass)));
     }
@@ -150,6 +152,10 @@ let HSArenaInfo = (function() {
     }
 
     function initEventListeners() {
+        document.querySelector('.menu').addEventListener('click', function() {
+            document.querySelector('.news-container').style.display = 'none';
+        });
+
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
             clearStats();
             clearCards();
@@ -168,11 +174,23 @@ let HSArenaInfo = (function() {
             
         document.querySelectorAll('.nav__list-classes a').forEach(e => 
             e.addEventListener('click', function() {
+                filter.discover = false;
                 createClassCardData(this.getAttribute('data-json'));
                 setClass(this);
                 clearCards();
                 displayCards();
             }));
+            
+        document.querySelectorAll('.nav__list-classes a:not([data-json="ALL"]):not([data-json="NEUTRAL"])').forEach(e => 
+            e.addEventListener('contextmenu', ev => {
+                ev.preventDefault();
+                
+                filter.discover = true;
+                createClassCardData(e.getAttribute('data-json'));
+                setClass(e);
+                clearCards();
+                displayCards();
+            }));            
             
         document.querySelectorAll('.nav__list-cost a').forEach(e => 
             e.addEventListener('click', function() {
@@ -234,8 +252,8 @@ let HSArenaInfo = (function() {
                 displayCards();
             }));
             
-        window.onclick = function(ev) {
-            let dropdown = ev.target.parentNode;
+        window.onclick = function(e) {
+            let dropdown = e.target.parentNode;
             
             if (dropdown.classList === undefined || !dropdown.classList.contains('dropdown'))
                 hideActiveDropdowns();
@@ -378,12 +396,17 @@ let HSArenaInfo = (function() {
     function setClass(el) {
         deselectList('nav__list-classes');
         el.classList.add('selected');
+        
+        if (filter.discover)
+            el.classList.add('discover');
     }
     
     function deselectList(filterList) {
         let selected = document.querySelector('.' + filterList + ' a.selected');
-        if (selected !== null)
+        if (selected !== null) {
             selected.classList.remove('selected');
+            selected.classList.remove('discover');
+        }
         
         return selected;
     }
@@ -467,11 +490,13 @@ let HSArenaInfo = (function() {
         div.classList.add('card-stats');
         
         let cardStats;
-        let currentClass = document.querySelector('.nav__list-classes a.selected');
-        
+        let currentClass = document.querySelector('.nav__list-classes a.selected').getAttribute('data-json');
+
         // Make sure multi-class cards get the right data if relevant class is selected
-        if (card.classes !== undefined && currentClass !== undefined && currentClass.getAttribute('data-json') !== 'ALL')
-            cardStats = winDraftRates[currentClass.getAttribute('data-json')][card.dbfId];
+        if (card.classes !== undefined && currentClass !== 'ALL')
+            cardStats = winDraftRates[currentClass][card.dbfId];
+        else if (filter.discover && !["ALL","NEUTRAL"].includes(currentClass)) // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
+            cardStats = winDraftRates[currentClass][card.dbfId];
         else cardStats = winDraftRates[card.cardClass][card.dbfId];
         
         let winRate = cardStats ? Math.round(cardStats.included_winrate * 10) / 10 : 'N/A';

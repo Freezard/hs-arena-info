@@ -92,6 +92,10 @@ ul {
   background: #ac7014;
 }
 
+.nav__list-classes .nav-list__button-standard.discover {
+  background: #cc7014;
+}
+
 .nav__row-filters {
   padding-top: 1px;
   justify-content: space-evenly;
@@ -252,6 +256,24 @@ ul {
 .container {
   max-width: 1600px; /*85%*/
   margin: 0 auto;
+}
+
+.news-container {
+  background-color: #fbfbdb;
+  color: #525202;
+  width: 50%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.news__title {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.news__date {
+  margin-bottom: 5px;
 }
 
 .loader {
