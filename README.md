@@ -16,6 +16,8 @@ https://hs-arena-info.herokuapp.com/
 ## USAGE
 ![Site overview](images/readme/rotation.jpg)
 >The default view (Current Cards button) shows the current arena cards. Click on a class and use the filters for more detailed results. Filters include card cost, type, race and so on. You can also search for specific card names or texts.
+>
+>Right-clicking on a class will enable Discover Mode, which includes neutral cards and displays their win/draft rates based on the selected class.
 
 ![Site overview](images/readme/odds.jpg)
 >Transformation odds lists the best chances for getting aid in the form of taunt, rush etc when transforming a minion (for example with Evolve). It also lists the average attack/health with the chosen mechanic for each mana pool. Clicking on a mana pool will display all the possible minions. Average Stats includes every minion (banned minions are included when transforming).
@@ -28,6 +30,4 @@ https://hs-arena-info.herokuapp.com/
 - Add discover odds
 - Add helpful arena sections (eg secrets)?
 - Display current arena sets?
-- Add more filters?
 - Add customized transformation odds?
-- Add news section?
