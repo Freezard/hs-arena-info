@@ -27,8 +27,8 @@ let HSArenaInfo = (function() {
         discover: false
     };
 
-    const version = 1.01;
-    const rotation = ['CORE', 'LOE', 'LOOTAPALOOZA', 'BOOMSDAY', 'ULDUM', 'SCHOLOMANCE', 'ALTERAC_VALLEY'];
+    const version = 1.05;
+    const rotation = ['CORE', 'KARA', 'BRM', 'UNGORO', 'GANGS', 'DRAGONS', 'ALTERAC_VALLEY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
