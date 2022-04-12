@@ -27,7 +27,7 @@ let HSArenaInfo = (function() {
         discover: false
     };
 
-    const version = 1.05;
+    const version = 1.1;
     const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
