@@ -28,11 +28,11 @@ let HSArenaInfo = (function() {
     };
 
     const version = 1.05;
-    const rotation = ['CORE', 'KARA', 'BRM', 'UNGORO', 'GANGS', 'DRAGONS', 'ALTERAC_VALLEY'];
+    const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
     
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
-        BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND,ALTERAC_VALLEY
+        BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND,ALTERAC_VALLEY,THE_SUNKEN_CITY
     */
     /*********************************************************
     **************************UTILS***************************
