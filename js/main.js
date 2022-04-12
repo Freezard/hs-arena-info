@@ -328,10 +328,12 @@ let HSArenaInfo = (function() {
                 return false;
         }
         if (filter.race !== '') {
-            if (filter.race !== 'MECH' && filter.race !== card.race)
-                return false;
-            else if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
-                return false;
+            if (card.race !== 'ALL') {
+                if (filter.race !== 'MECH' && filter.race !== card.race)
+                    return false;
+                else if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
+                    return false;
+            }
         }
         if (filter.rarity !== '') {
             if (filter.rarity !== card.rarity)
