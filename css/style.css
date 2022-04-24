@@ -193,6 +193,10 @@ ul {
   grid-auto-rows: 242px;
 }
 
+.card-container div.changed {
+  background-color: #fffdd0;
+}
+
 .card-container > div > img {
   width: 100%;
   height: 212px;

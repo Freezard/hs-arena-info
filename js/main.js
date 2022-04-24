@@ -10,6 +10,8 @@ let HSArenaInfo = (function() {
     let arenaCardData = []; // Arena only data
     let filteredCardData = []; // Arena data filtered by class/mechanic
     let winDraftRates = {};
+    // Win rate of changed cards right before their change
+    const changedCards = {};
     
     // Used for calculating stats/odds
     let totalStats;
@@ -29,7 +31,6 @@ let HSArenaInfo = (function() {
 
     const version = 1.1;
     const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
-    
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
         BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND,ALTERAC_VALLEY,THE_SUNKEN_CITY
@@ -39,6 +40,35 @@ let HSArenaInfo = (function() {
     *********************************************************/
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    // Helper function for populating changedCards
+    function generateChangedCards() {
+        let cardList = ['Kazakusan', 'Pufferfist', 'Switcheroo', 'Miracle Growth'];
+        let result = {};
+        
+        cardList.forEach((name) => {
+            let dbfId = getDBFID(name);
+            result[dbfId] = {};
+           
+            for (let cardClass in winDraftRates) {
+                if (winDraftRates[cardClass][dbfId])      
+                    result[dbfId][cardClass] = winDraftRates[cardClass][dbfId].included_winrate;
+            }
+        });
+        
+        console.log(JSON.stringify(result));
+        
+        function getDBFID(name) {
+            let dbfId;
+            arenaCardData.forEach((card) => {
+                if (card.name === name) {
+                    dbfId = card.dbfId;
+                    return;
+                }
+            });
+            return dbfId;
+        }
     }
     /*********************************************************
     **************************INIT****************************
@@ -126,20 +156,20 @@ let HSArenaInfo = (function() {
             let request = await fetch('/cardRates');
             let data = await request.json();
             
-            for (let HSClass in data.series.data) {
-                if (winDraftRates[HSClass] === undefined)
-                    if (HSClass === 'ALL')
+            for (let cardClass in data.series.data) {
+                if (winDraftRates[cardClass] === undefined)
+                    if (cardClass === 'ALL')
                         winDraftRates.NEUTRAL = {};
-                    else winDraftRates[HSClass] = {};
+                    else winDraftRates[cardClass] = {};
                 
-                for (let card of data.series.data[HSClass])
-                    if (HSClass === 'ALL')
+                for (let card of data.series.data[cardClass])
+                    if (cardClass === 'ALL')
                         winDraftRates.NEUTRAL[card.dbf_id] =
                         {
                             included_winrate : card.included_winrate,
                             included_popularity : card.included_popularity
                         }
-                    else winDraftRates[HSClass][card.dbf_id] =
+                    else winDraftRates[cardClass][card.dbf_id] =
                          {
                              included_winrate : card.included_winrate,
                              included_popularity : card.included_popularity
@@ -259,10 +289,6 @@ let HSArenaInfo = (function() {
                 hideActiveDropdowns();
         };
     }
-    /*********************************************************
-    **********************LOCAL STORAGE***********************
-    *********************************************************/
-
     /*********************************************************
     **********************CARD FUNCTIONS**********************
     *********************************************************/
@@ -445,7 +471,7 @@ let HSArenaInfo = (function() {
         
         // Get rid of vertical gap when viewing odds
         if (cost === undefined && Object.keys(winDraftRates).length !== 0)
-            grid.style.gridAutoRows = '242px';
+            grid.style.gridAutoRows = '240px';
         else grid.style.gridAutoRows = '212px';
         
         // Only load images when they are in the viewport
@@ -480,26 +506,35 @@ let HSArenaInfo = (function() {
         img.setAttribute('height', '388');
         div.appendChild(img);
         
+        let cardChanged = changedCards[card.dbfId];
+        
+        // Mark card if changed recently
+        if (cardChanged)
+            div.classList.add('changed');
+        
         if (cost === undefined && Object.keys(winDraftRates).length !== 0)
-            div.appendChild(createRatesBar(card));
+            div.appendChild(createRatesBar(card, cardChanged));
         
         return div;
     }
     
     // Creates the win/draft rates bar
-    function createRatesBar(card) {
+    function createRatesBar(card, cardChanged) {
         let div = document.createElement('div');
         div.classList.add('card-stats');
         
         let cardStats;
         let currentClass = document.querySelector('.nav__list-classes a.selected').getAttribute('data-json');
+        let appliedClass;
 
         // Make sure multi-class cards get the right data if relevant class is selected
+        // TODO: Simplify
         if (card.classes !== undefined && currentClass !== 'ALL')
-            cardStats = winDraftRates[currentClass][card.dbfId];
+            appliedClass = currentClass;
         else if (filter.discover && !["ALL","NEUTRAL"].includes(currentClass)) // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
-            cardStats = winDraftRates[currentClass][card.dbfId];
-        else cardStats = winDraftRates[card.cardClass][card.dbfId];
+            appliedClass = currentClass;
+        else appliedClass = card.cardClass;
+        cardStats = winDraftRates[appliedClass][card.dbfId];
         
         let winRate = cardStats ? Math.round(cardStats.included_winrate * 10) / 10 : 'N/A';
         let draftRate = cardStats ? Math.round(cardStats.included_popularity * 10) / 10 : 'N/A';
@@ -507,6 +542,11 @@ let HSArenaInfo = (function() {
         let div2 = document.createElement('div');
         div2.setAttribute('title', 'Deck win rate');
         div2.innerHTML = cardStats ? winRate + '%' : 'N/A';
+        if (cardChanged) {
+            let difference = Math.round((cardStats.included_winrate - cardChanged[appliedClass]) * 10) / 10;
+            let sign = difference >= 0 ? '+' : '';
+            div2.innerHTML += ' (' + sign + difference + '%)';
+        }
         if (winRate < 49 )
             div2.classList.add('card-stats--negative');
         else if (winRate >= 49 && winRate < 51 )
