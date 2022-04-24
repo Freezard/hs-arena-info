@@ -12,6 +12,8 @@ let HSArenaInfo = (function() {
     let winDraftRates = {};
     // Win rate of changed cards right before their change
     const changedCards = {};
+    // Used for stats/odds since Colossal appendages are excluded by default
+    const colossalExtraStats = {"Crabatoa":{"attack":8,"health":2,"mechanics":["RUSH"]},"Colaque":{"attack":0,"health":8,"mechanics":["TAUNT"]},"Glugg the Gulper":{"attack":6,"health":6,"mechanics":["TAUNT"]},"Hydralodon":{"attack":6,"health":2,"mechanics":[]},"Nellie, the Great Thresher":{"attack":2,"health":6,"mechanics":["TAUNT"]},"The Leviathan":{"attack":4,"health":2,"mechanics":["RUSH","DIVINE_SHIELD"]},"Xhilag of the Abyss":{"attack":4,"health":8,"mechanics":[]},"Blackwater Behemoth":{"attack":1,"health":4,"mechanics":[]},"Gaia, the Techtonic":{"attack":4,"health":6,"mechanics":["RUSH"]},"Gigafin":{"attack":4,"health":7,"mechanics":["TAUNT"]}};
     
     // Used for calculating stats/odds
     let totalStats;
@@ -117,7 +119,8 @@ let HSArenaInfo = (function() {
         totalMinions = {};
         let any = type.split('+')[0].split(',');
         let all = type.split('+')[1] !== undefined ? type.split('+')[1].split(',') : [];
-        
+
+        // TODO: Simplify
         for (let c in arenaCardData) {
             let card = arenaCardData[c];
 
@@ -131,18 +134,35 @@ let HSArenaInfo = (function() {
             if (type === 'AVERAGE') {
                 if (totalStats[card.cost] === undefined)
                     totalStats[card.cost] = { attack: 0, health: 0 };
+                
                 totalStats[card.cost].attack += card.attack;
                 totalStats[card.cost].health += card.health;
+                
+                if (colossalExtraStats[card.name]) {
+                    totalStats[card.cost].attack += colossalExtraStats[card.name].attack;
+                    totalStats[card.cost].health += colossalExtraStats[card.name].health;
+                }
             } else if (card.mechanics !== undefined) {
-                if ((!any.some(x => card.mechanics.indexOf(x) >= 0 && all.every(x => card.mechanics.indexOf(x) >= 0))))
+                if ((!any.some(x => (card.mechanics.indexOf(x) >= 0 || 
+                    (colossalExtraStats[card.name] !== undefined && colossalExtraStats[card.name].mechanics.indexOf(x) >= 0)) && 
+                    all.every(x => card.mechanics.indexOf(x) >= 0 || 
+                    (colossalExtraStats[card.name] !== undefined && colossalExtraStats[card.name].mechanics.indexOf(x) >= 0)))))
                     continue;
                 else if (card.text !== undefined && card.text.startsWith('<b>Dormant</b>')) // Also add can't attack?
                     continue;
-                    
+
                 if (totalStats[card.cost] === undefined)
                     totalStats[card.cost] = { attack: 0, health: 0, minions: 0 };
-                totalStats[card.cost].attack += card.attack;
-                totalStats[card.cost].health += card.health;
+
+                if ((any.some(x => (colossalExtraStats[card.name] !== undefined && colossalExtraStats[card.name].mechanics.indexOf(x) >= 0) && 
+                    all.every(x => (colossalExtraStats[card.name] !== undefined && colossalExtraStats[card.name].mechanics.indexOf(x) >= 0))))) {
+                    totalStats[card.cost].attack += colossalExtraStats[card.name].attack;
+                    totalStats[card.cost].health += colossalExtraStats[card.name].health;
+                }
+                if ((any.some(x => card.mechanics.indexOf(x) >= 0 && all.every(x => card.mechanics.indexOf(x) >= 0)))) {
+                    totalStats[card.cost].attack += card.attack;
+                    totalStats[card.cost].health += card.health;
+                }
                 totalStats[card.cost].minions++;
             } else continue;
 
