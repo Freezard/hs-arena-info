@@ -1,5 +1,5 @@
 # HSArena Info
-A web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
+A desktop web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
 
 https://hs-arena-info.herokuapp.com/
  
