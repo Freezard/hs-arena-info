@@ -9,7 +9,7 @@ https://hs-arena-info.herokuapp.com/
 - Recently nerfed or buffed cards are marked and also have their win rate change displayed
 - See helpful transform data (for example when evolving a minion)
   - Average minion attack/health for each mana pool
-  - Chances of a minion having taunt, rush etc
+  - Chances of a minion having Taunt, Rush etc
   - List all possible minions to compare strengths for different mana pools
 
 ## USAGE
@@ -21,7 +21,9 @@ https://hs-arena-info.herokuapp.com/
 ### Transformation Odds
 
 ![Site overview](images/readme/odds.jpg)
->Transformation odds lists the best chances for getting aid in the form of taunt, rush etc when transforming a minion (for example with Evolve). It also lists the average attack/health with the chosen mechanic for each mana pool. Clicking on a mana pool will display all the possible minions. Average Stats includes every minion (banned minions are included when transforming).
+>Transformation odds are helpful when needing immediate survival as it lists the best chances for getting Taunt, Rush etc when transforming a minion with a certain cost (for example with Evolve). It also lists the average attack/health with the chosen mechanic for each mana pool. Clicking on a mana pool will display all the possible minions. Average Stats includes every minion.
+>- Banned minions are included when transforming
+>- Dormant minions are excluded for mechanics since you usually want a minion that has immediate Rush etc
 
 ### Win/Draft Rates
 ![Site overview](images/readme/card.jpg)
