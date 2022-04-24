@@ -148,7 +148,7 @@ let HSArenaInfo = (function() {
                     all.every(x => card.mechanics.indexOf(x) >= 0 || 
                     (colossalExtraStats[card.name] !== undefined && colossalExtraStats[card.name].mechanics.indexOf(x) >= 0)))))
                     continue;
-                else if (card.text !== undefined && card.text.startsWith('<b>Dormant</b>')) // Also add can't attack?
+                else if (card.text !== undefined && (card.text.startsWith('<b>Dormant</b>') || card.text.includes('Starts <b>Dormant</b>'))) // Also add can't attack?
                     continue;
 
                 if (totalStats[card.cost] === undefined)
