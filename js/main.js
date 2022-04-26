@@ -11,7 +11,7 @@ let HSArenaInfo = (function() {
     let filteredCardData = []; // Arena data filtered by class/mechanic
     let winDraftRates = {};
     // Win rate of changed cards right before their change
-    const changedCards = {};
+    const changedCards = {"71684":{"NEUTRAL":49.26,"DEMONHUNTER":50.92,"DRUID":55.15,"HUNTER":34.44,"MAGE":48.55,"PALADIN":51.45,"PRIEST":42.62,"ROGUE":46.24,"SHAMAN":47.82,"WARLOCK":46.07,"WARRIOR":42.65},"71690":{"NEUTRAL":57.26,"DEMONHUNTER":60.16,"DRUID":60.14,"HUNTER":44.89,"MAGE":52.31,"PALADIN":55.71,"PRIEST":44.91,"ROGUE":57.22,"SHAMAN":54.23,"WARLOCK":50.99,"WARRIOR":44.9},"73471":{"NEUTRAL":61.37,"DRUID":61.37},"80118":{"NEUTRAL":44.94,"PRIEST":44.94}};
     // Used for stats/odds since Colossal appendages are excluded by default
     const colossalExtraStats = {"Crabatoa":{"attack":8,"health":2,"mechanics":["RUSH"]},"Colaque":{"attack":0,"health":8,"mechanics":["TAUNT"]},"Glugg the Gulper":{"attack":6,"health":6,"mechanics":["TAUNT"]},"Hydralodon":{"attack":6,"health":2,"mechanics":[]},"Nellie, the Great Thresher":{"attack":2,"health":6,"mechanics":["TAUNT"]},"The Leviathan":{"attack":4,"health":2,"mechanics":["RUSH","DIVINE_SHIELD"]},"Xhilag of the Abyss":{"attack":4,"health":8,"mechanics":[]},"Blackwater Behemoth":{"attack":1,"health":4,"mechanics":[]},"Gaia, the Techtonic":{"attack":4,"health":6,"mechanics":["RUSH"]},"Gigafin":{"attack":4,"health":7,"mechanics":["TAUNT"]}};
     
@@ -31,7 +31,7 @@ let HSArenaInfo = (function() {
         discover: false
     };
 
-    const version = 1.1;
+    const version = 1.11;
     const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
@@ -638,6 +638,7 @@ let HSArenaInfo = (function() {
             document.querySelector('.container').innerHTML = template;
             createArenaCardData();
             initEventListeners();
+            ///generateChangedCards();
         });
     }
     /*********************************************************
