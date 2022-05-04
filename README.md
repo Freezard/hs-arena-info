@@ -24,6 +24,7 @@ https://hs-arena-info.herokuapp.com/
 >Transformation odds are helpful when needing immediate survival as it lists the best chances for getting Taunt, Rush etc when transforming a minion with a certain cost (for example with Evolve). It also lists the average attack/health with the chosen mechanic for each mana pool. Clicking on a mana pool will display all the possible minions. Average Stats includes every minion.
 >- Banned minions are included when transforming
 >- Dormant minions are excluded for mechanics since you usually want a minion that has immediate Rush etc
+>- Colossal minions are excluded since they can't be transformed into
 
 ### Win/Draft Rates
 ![Site overview](images/readme/card.jpg)
