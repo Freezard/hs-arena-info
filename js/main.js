@@ -9,10 +9,12 @@ let HSArenaInfo = (function() {
     let cardData; // Raw JSON data
     let arenaCardData = []; // Arena only data
     let filteredCardData = []; // Arena data filtered by class/mechanic
-    let winDraftRates = {};
+    
+    let classWinRates = {};
+    let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
     const changedCards = {"71684":{"NEUTRAL":49.26,"DEMONHUNTER":50.92,"DRUID":55.15,"HUNTER":34.44,"MAGE":48.55,"PALADIN":51.45,"PRIEST":42.62,"ROGUE":46.24,"SHAMAN":47.82,"WARLOCK":46.07,"WARRIOR":42.65},"71690":{"NEUTRAL":57.26,"DEMONHUNTER":60.16,"DRUID":60.14,"HUNTER":44.89,"MAGE":52.31,"PALADIN":55.71,"PRIEST":44.91,"ROGUE":57.22,"SHAMAN":54.23,"WARLOCK":50.99,"WARRIOR":44.9},"73471":{"NEUTRAL":61.37,"DRUID":61.37},"80118":{"NEUTRAL":44.94,"PRIEST":44.94}};
-    
+        
     // Used for calculating stats/odds
     let totalStats;
     let totalMinions;
@@ -28,6 +30,10 @@ let HSArenaInfo = (function() {
         search: '',
         discover: false
     };
+    
+    let settings = {
+        relativeWinRates: false,
+    };    
 
     const version = 1.12;
     const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
@@ -187,11 +193,35 @@ let HSArenaInfo = (function() {
             console.log(error);
         }
     }
+    
+    // Get class win rates from HSReplay.net and create object
+    async function createClassWinRates() {
+        try {
+            let request = await fetch('/classRates');
+            let data = await request.json();
+            
+            for (let cardClass in data.series.data) {
+                if (classWinRates[cardClass] === undefined)
+                    classWinRates[cardClass] = {};
+                
+                classWinRates[cardClass] = data.series.data[cardClass][1].win_rate;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     function initEventListeners() {
         document.querySelector('.menu').addEventListener('click', function() {
             document.querySelector('.news-container').style.display = 'none';
         });
+        
+        document.querySelector('[name="relativeWinRates"]').addEventListener('click', function() {
+            settings.relativeWinRates = !settings.relativeWinRates;
+            clearCards();
+            displayCards();
+        });        
 
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
             clearStats();
@@ -543,23 +573,46 @@ let HSArenaInfo = (function() {
         else appliedClass = card.cardClass;
         cardStats = winDraftRates[appliedClass][card.dbfId];
         
-        let winRate = cardStats ? Math.round(cardStats.included_winrate * 10) / 10 : 'N/A';
+        let winRate;
         let draftRate = cardStats ? Math.round(cardStats.included_popularity * 10) / 10 : 'N/A';
+        
+        if (settings.relativeWinRates && appliedClass !== 'NEUTRAL')
+            winRate = cardStats ? Math.round((cardStats.included_winrate - classWinRates[appliedClass]) * 10) / 10 : 'N/A';
+        else winRate = cardStats ? Math.round(cardStats.included_winrate * 10) / 10 : 'N/A';
         
         let div2 = document.createElement('div');
         div2.setAttribute('title', 'Deck win rate');
-        div2.innerHTML = cardStats ? winRate + '%' : 'N/A';
+        div2.innerHTML = '';
+                
+        if (settings.relativeWinRates && appliedClass !== 'NEUTRAL') {
+            let sign = winRate >= 0 ? '+' : '';
+            div2.innerHTML += sign;
+            div2.setAttribute('title', 'Deck win rate (relative to class win rate)');
+        }
+        
+        div2.innerHTML += cardStats ? winRate + '%' : 'N/A';
+        
         if (cardChanged) {
             let difference = Math.round((cardStats.included_winrate - cardChanged[appliedClass]) * 10) / 10;
             let sign = difference >= 0 ? '+' : '';
             div2.innerHTML += ' (' + sign + difference + '%)';
         }
-        if (winRate < 49 )
-            div2.classList.add('card-stats--negative');
-        else if (winRate >= 49 && winRate < 51 )
-            div2.classList.add('card-stats--neutral');
-        else if (winRate >= 51)
-            div2.classList.add('card-stats--positive');
+        
+        if (settings.relativeWinRates && appliedClass !== 'NEUTRAL') {
+            if (winRate < -2 )
+                div2.classList.add('card-stats--negative');
+            else if (winRate >= -2 && winRate < 2 )
+                div2.classList.add('card-stats--neutral');
+            else if (winRate >= 2)
+                div2.classList.add('card-stats--positive');
+        } else {
+            if (winRate < 49 )
+                div2.classList.add('card-stats--negative');
+            else if (winRate >= 49 && winRate < 51 )
+                div2.classList.add('card-stats--neutral');
+            else if (winRate >= 51)
+                div2.classList.add('card-stats--positive');
+        }
         
         let div3 = document.createElement('div');
         div3.setAttribute('title', 'Draft rate');
@@ -621,11 +674,13 @@ let HSArenaInfo = (function() {
         document.querySelector('.version').style.opacity = '1';
         
         createWinDraftRates().then(() => {
-            let template = document.getElementById('template-stats').innerHTML;
-            document.querySelector('.container').innerHTML = template;
-            createArenaCardData();
-            initEventListeners();
-            ///generateChangedCards();
+            createClassWinRates().then(() => {
+                let template = document.getElementById('template-stats').innerHTML;
+                document.querySelector('.container').innerHTML = template;
+                createArenaCardData();
+                initEventListeners();
+                ///generateChangedCards();
+            });
         });
     }
     /*********************************************************

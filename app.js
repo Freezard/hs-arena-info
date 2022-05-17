@@ -33,6 +33,14 @@ app.get("/cardRates", function(req, res) {
         .then(data => res.send(data));
 });
 
+app.get("/classRates", function(req, res) {
+	const url = "https://hsreplay.net/analytics/query/player_class_performance_summary/";
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => res.send(data));
+});
+
 app.listen(port);
 
 console.log('Server started.');

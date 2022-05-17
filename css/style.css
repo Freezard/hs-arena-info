@@ -129,7 +129,7 @@ ul {
 }
 
 .dropdown-content a {
-  color: black;
+  color: #000;
   padding: 2px 5px;
   display: block;
   text-align: left;
@@ -236,12 +236,20 @@ ul {
 ***************************MISC***************************
 *********************************************************/
 .header {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  background-color: #5d3707; /*432100*/
+  display: grid;
+  grid-template-columns: 1fr repeat(1, auto) 1fr;
+  background-color: #5d3707;
   margin-bottom: 25px;
   padding: 0 0 3px 0;
+}
+
+.nav__row-title {
+  grid-column-start: 2;
+}
+
+.nav__row-settings {
+  margin-left: auto;
+  margin-right: 10px;
 }
 
 .title {
@@ -255,6 +263,15 @@ ul {
   color: #fa8a8a;
   text-align: center;
   opacity: 0;
+}
+
+.setting {
+  color: #ddd;
+}
+
+label {
+  display: flex;
+  align-items: center;
 }
 
 .container {
@@ -273,12 +290,17 @@ ul {
 
 .news__title {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin-bottom: 10px;
 }
 
 .news__date {
-  margin-bottom: 5px;
+  color: #a25202;
+  font-size: 0.95rem;
+}
+
+.news__content {
+  margin-bottom: 20px;
 }
 
 .loader {

@@ -19,10 +19,17 @@
 </head>
 <body>
   <nav class="header">
-    <div class="nav__element">
-      <a href="https://github.com/Freezard/hs-arena-info" class="title" target="_blank">HSArena Info</a>
-      <span class="version">Version: 23.0.3</span>
+    <div class="nav__row nav__row-title">
+      <div class="nav__element">
+        <a href="https://github.com/Freezard/hs-arena-info" class="title" target="_blank">HSArena Info</a>
+        <span class="version">Version: 23.2.0</span>
+      </div>
     </div>
+    <div class="nav__row nav__row-settings">
+      <div class="nav__element">
+        <label class="setting"><input type="checkbox" name="relativeWinRates">Relative win rates</label>
+      </div>
+    </div>    
   </nav>
   <div class="container">
     <div class="loader"></div>
@@ -194,7 +201,7 @@
             <a href="#">Shadow</a>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
   </div>
 </nav>
@@ -206,6 +213,10 @@
 </div>
 <div class="news-container">
   <div class="news__title">News</div>
+  <div>
+    <div class="news__date">17 May</div>
+    <div class="news__content">Added a setting to display win rates relative to the class win rate. For example, if a class has 45% win rate and a card has 47% then it will display +2%. The setting can be found in the top-right.</div>
+  </div>
   <div>
     <div class="news__date">27 April</div>
     <div class="news__content">Recently buffed or nerfed cards will now be colored yellow as well as having their win rate increase/decrease since the change displayed.</div>
