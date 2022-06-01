@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.17.2",
     "node-fetch": "^2.6.6",
+    "nodemon": "^2.0.16",
     "serve-favicon": "^2.5.0"
   }
 }

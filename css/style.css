@@ -284,6 +284,7 @@ label {
   color: #525202;
   width: 50%;
   margin: 0 auto;
+  margin-bottom: 20px;
   padding: 10px;
   /*display: none;*/
 }

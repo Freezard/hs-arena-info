@@ -14,7 +14,13 @@ let HSArenaInfo = (function() {
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
     const changedCards = {"63732":{"NEUTRAL":39.62,"PRIEST":39.62},"70395":{"NEUTRAL":51.93,"ROGUE":51.93},"71232":{"NEUTRAL":43.01,"HUNTER":43.01},"71233":{"NEUTRAL":45.47,"HUNTER":45.47},"71289":{"NEUTRAL":55.25,"ROGUE":55.25},"71294":{"NEUTRAL":45.89,"ROGUE":45.89},"71694":{"NEUTRAL":58.01,"DEMONHUNTER":58.01},"72254":{"NEUTRAL":49.41,"WARLOCK":49.41},"72481":{"NEUTRAL":48.58,"PRIEST":48.58},"72487":{"NEUTRAL":44.7,"PRIEST":44.7},"72488":{"NEUTRAL":51.53,"PRIEST":51.53},"72896":{"NEUTRAL":42.22,"HUNTER":42.22},"73436":{"NEUTRAL":44.28,"WARLOCK":44.28},"73442":{"NEUTRAL":48.64,"WARLOCK":48.64},"73726":{"NEUTRAL":60.46,"DEMONHUNTER":60.46},"74755":{"NEUTRAL":47.39,"HUNTER":47.39},"76926":{"NEUTRAL":50.57,"WARLOCK":50.57},"86539":{"NEUTRAL":49.01,"ROGUE":49.01},"86540":{"NEUTRAL":55.29,"ROGUE":55.29}};
-        
+    // Raw list of changed cards used by function generateChangedCards
+    const changedCardsRaw = ['Multi-Strike', 'Dragonbane Shot', 'Xhilag of the Abyss',
+            'Harpoon Gun', 'Pet Collector', 'Azsharan Saber', 'Blackwater Behemoth',
+            'Whirlpool', 'Shadowcloth Needle', 'Serpent Wig', 'Tooth of Nefarian',
+            'SI:7 Smuggler', 'Wildpaw Gnoll', 'Tess Greymane', 'Hench-Clan Burglar',
+            "Sira'kess Cultist", 'Dragged Below', 'Azsharan Scavenger', 'Bloodscent Vilefin'];
+            
     // Used for calculating stats/odds
     let totalStats;
     let totalMinions;
@@ -28,15 +34,16 @@ let HSArenaInfo = (function() {
         rarity: '',
         school: '',
         search: '',
-        discover: false
+        discover: false,
+        recentlyChanged: false
     };
     
     let settings = {
         relativeWinRates: false,
     };    
 
-    const version = 1.13;
-    const rotation = ['CORE', 'LOE', 'OG', 'TGT', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
+    const version = 1.15;
+    const rotation = ['CORE', 'BOOMSDAY', 'DRAGONS', 'THE_BARRENS', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY'];
     /*  CORE,NAXX,GVG,BRM,TGT,LOE,OG,KARA,GANGS:gadgetzan,UNGORO,ICECROWN:kotft,LOOTAPALOOZA:kobolds,
         GILNEAS:witchwood,BOOMSDAY,TROLL:rastakhan,DALARAN:ros,ULDUM,DRAGONS,YEAR_OF_THE_DRAGON:galakrond,
         BLACK_TEMPLE:outland,SCHOLOMANCE,DARKMOON_FAIRE,THE_BARRENS,STORMWIND,ALTERAC_VALLEY,THE_SUNKEN_CITY
@@ -50,10 +57,9 @@ let HSArenaInfo = (function() {
     
     // Helper function for populating changedCards
     function generateChangedCards() {
-        let cardList = ['Multi-Strike', 'Dragonbane Shot', 'Xhilag of the Abyss', 'Harpoon Gun', 'Pet Collector', 'Azsharan Saber', 'Blackwater Behemoth', 'Whirlpool', 'Shadowcloth Needle', 'Serpent Wig', 'Tooth of Nefarian', 'SI:7 Smuggler', 'Wildpaw Gnoll', 'Tess Greymane', 'Hench-Clan Burglar', "Sira'kess Cultist", 'Dragged Below', 'Azsharan Scavenger', 'Bloodscent Vilefin'];
         let result = {};
         
-        cardList.forEach((name) => {
+        changedCardsRaw.forEach((name) => {
             let dbfId = getDBFID(name);
             result[dbfId] = {};
            
@@ -426,6 +432,10 @@ let HSArenaInfo = (function() {
             if (!name.includes(search) && !text.includes(search))
                 return false;
         }
+        if (filter.recentlyChanged) {
+            if (!changedCardsRaw.includes(card.name))
+                return false;
+        }        
         
         return true;
     }
