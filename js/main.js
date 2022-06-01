@@ -393,7 +393,7 @@ let HSArenaInfo = (function() {
         if (filter.type !== '') {
             if (filter.type !== 'SECRET' && filter.type !== card.type)
                 return false;
-            else if (filter.type === 'SECRET' && (card.text === undefined || !card.text.startsWith('<b>Secret:</b>')))
+            else if (filter.type === 'SECRET' && (card.mechanics === undefined || !card.mechanics.includes('SECRET')))
                 return false;
         }
         if (filter.race !== '') {
