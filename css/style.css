@@ -239,8 +239,7 @@ ul {
   display: grid;
   grid-template-columns: 1fr repeat(1, auto) 1fr;
   background-color: #5d3707;
-  margin-bottom: 25px;
-  padding: 0 0 3px 0;
+  margin-bottom: 20px;
 }
 
 .nav__row-title {
