@@ -303,6 +303,10 @@ label {
   margin-bottom: 20px;
 }
 
+.news-container div:last-child .news__content {
+  margin-bottom: 0;
+}
+
 .loader {
   margin: auto;
   border: 10px solid #f1edec;

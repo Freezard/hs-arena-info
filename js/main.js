@@ -227,7 +227,7 @@ let HSArenaInfo = (function() {
             settings.relativeWinRates = !settings.relativeWinRates;
             clearCards();
             displayCards();
-        });        
+        });
 
         document.querySelector('.nav__list-rotation a').addEventListener('click', function() {
             clearStats();
@@ -310,12 +310,19 @@ let HSArenaInfo = (function() {
                 e.parentNode.querySelector('a.selected').classList.remove('selected');
                 
                 if (e.innerHTML === 'Any' || selected) {
-                    setFilter(filterName, '');
+                    if (filterName === 'special') {
+                        setFilter('recentlyChanged', false);
+                    }
+                    else setFilter(filterName, '');
                     dropdownButton.classList.remove('selected');
                     dropdownButton.innerHTML = capitalizeFirstLetter(filterName);
                     e.parentNode.querySelector('a').classList.add('selected');
                 } else {
-                    setFilter(filterName, e.innerHTML.toUpperCase().replace(/ /g,'_'));
+                    if (filterName === 'special') {
+                        setFilter('recentlyChanged', false);
+                        setFilter(e.getAttribute('data-json'), true);
+                    }
+                    else setFilter(filterName, e.innerHTML.toUpperCase().replace(/ /g,'_'));
                     dropdownButton.classList.add('selected');
                     dropdownButton.innerHTML = e.innerHTML;
                     e.classList.add('selected');
