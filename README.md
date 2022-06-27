@@ -42,5 +42,4 @@ https://hs-arena-info.herokuapp.com/
 ## PLANNED FEATURES
 - Mark banned cards, add setting for hiding them
 - Add discover odds
-- Display current arena sets
 - Add customized transformation odds
