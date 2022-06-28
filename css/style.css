@@ -125,7 +125,6 @@ ul {
   z-index: 1;
   max-height: 300px;
   overflow-y: scroll;
-  scrollbar-color: red yellow;
 }
 
 .dropdown-content a {
