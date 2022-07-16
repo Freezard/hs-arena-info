@@ -139,7 +139,7 @@ let HSArenaInfo = (function() {
         for (let c in arenaCardData) {
             let card = arenaCardData[c];
 
-            if (card.type !== 'MINION')
+            if (card.type !== 'MINION' || card.set === 'TAVERNS_OF_TIME')
                 continue;
 
             if (totalMinions[card.cost] === undefined)
