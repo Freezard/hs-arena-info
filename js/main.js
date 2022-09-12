@@ -39,7 +39,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.19;
+    const version = 1.20;
     const rotation = ['CORE', 'KARA', 'TROLL', 'ULDUM', 'SCHOLOMANCE', 'DARKMOON_FAIRE', 'REVENDRETH'];
     const sets = {
         CORE: 'Core',
