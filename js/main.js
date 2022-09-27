@@ -13,9 +13,9 @@ let HSArenaInfo = (function() {
     let classWinRates = {};
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
-    const changedCards = {"79934":{"NEUTRAL":{"winrate":57.71,"draftrate":1.93},"DEMONHUNTER":{"winrate":57.41,"draftrate":2.11},"DRUID":{"winrate":53.51,"draftrate":1.87},"HUNTER":{"winrate":54.51,"draftrate":1.55},"MAGE":{"winrate":60.39,"draftrate":1.93},"PALADIN":{"winrate":58.65,"draftrate":2.07},"PRIEST":{"winrate":56.89,"draftrate":2.29},"ROGUE":{"winrate":50.45,"draftrate":1.75},"SHAMAN":{"winrate":53.32,"draftrate":1.73},"WARLOCK":{"winrate":56.33,"draftrate":2.11},"WARRIOR":{"winrate":59.01,"draftrate":1.77}},"84356":{"NEUTRAL":{"winrate":63.82,"draftrate":8.29},"MAGE":{"winrate":63.82,"draftrate":31.44}}};
+    const changedCards = {};
     // List of changed cards by name, used by function generateChangedCards
-    const changedCardsRaw = ['Nightcloak Sanctum', "Kael'thas Sinstrider"];
+    const changedCardsRaw = [];
     
     // Used for calculating stats/odds
     let totalStats;
@@ -40,7 +40,7 @@ let HSArenaInfo = (function() {
     };    
 
     const version = 1.20;
-    const rotation = ['CORE', 'KARA', 'TROLL', 'ULDUM', 'SCHOLOMANCE', 'DARKMOON_FAIRE', 'REVENDRETH'];
+    const rotation = ['CORE', 'BRM', 'UNGORO', 'LOOTAPALOOZA', 'DALARAN', 'BLACK_TEMPLE', 'REVENDRETH'];
     const sets = {
         CORE: 'Core',
         NAXX: 'Naxxramas',
