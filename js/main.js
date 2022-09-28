@@ -39,7 +39,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.20;
+    const version = 1.21;
     const rotation = ['CORE', 'BRM', 'UNGORO', 'LOOTAPALOOZA', 'DALARAN', 'BLACK_TEMPLE', 'REVENDRETH'];
     const sets = {
         CORE: 'Core',
