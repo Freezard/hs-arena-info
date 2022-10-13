@@ -13,9 +13,9 @@ let HSArenaInfo = (function() {
     let classWinRates = {};
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
-    const changedCards = {};
+    const changedCards = {"76984":{"NEUTRAL":{"winrate":55.81,"draftrate":2.27},"DEMONHUNTER":{"winrate":58.42,"draftrate":2.57},"DRUID":{"winrate":47.7,"draftrate":2.34},"HUNTER":{"winrate":51.7,"draftrate":2.13},"MAGE":{"winrate":57.39,"draftrate":2.29},"PALADIN":{"winrate":58.78,"draftrate":2.14},"PRIEST":{"winrate":53.73,"draftrate":2.3},"ROGUE":{"winrate":53.27,"draftrate":2.85},"SHAMAN":{"winrate":54.22,"draftrate":1.99},"WARLOCK":{"winrate":56.93,"draftrate":2.21},"WARRIOR":{"winrate":47.65,"draftrate":2.05}},"78412":{"NEUTRAL":{"winrate":56.77,"draftrate":1.47},"HUNTER":{"winrate":56.77,"draftrate":23.69}},"78416":{"NEUTRAL":{"winrate":58.7,"draftrate":0.65},"HUNTER":{"winrate":58.7,"draftrate":10.56}},"78419":{"NEUTRAL":{"winrate":60.74,"draftrate":0.32},"HUNTER":{"winrate":60.74,"draftrate":5.3}},"78420":{"NEUTRAL":{"winrate":55,"draftrate":0.65},"HUNTER":{"winrate":55,"draftrate":10.52}}};
     // List of changed cards by name, used by function generateChangedCards
-    const changedCardsRaw = [];
+    const changedCardsRaw = ['Theotar, the Mad Duke', 'Spirit Poacher', 'Stag Charge', 'Wild Spirits', "Ara'lon"];
     
     // Used for calculating stats/odds
     let totalStats;
@@ -39,7 +39,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.21;
+    const version = 1.22;
     const rotation = ['CORE', 'BRM', 'UNGORO', 'LOOTAPALOOZA', 'DALARAN', 'BLACK_TEMPLE', 'REVENDRETH'];
     const sets = {
         CORE: 'Core',
