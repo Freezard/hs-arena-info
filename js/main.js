@@ -40,8 +40,10 @@ let HSArenaInfo = (function() {
     };    
 
     const version = 1.22;
-    const rotation = ['CORE', 'BRM', 'UNGORO', 'LOOTAPALOOZA', 'DALARAN', 'BLACK_TEMPLE', 'REVENDRETH'];
+    const rotation = ['LEGACY', 'EXPERT1', 'NAXX', 'GVG', 'BRM', 'TGT', 'LOE'];
     const sets = {
+        LEGACY: 'Legacy',
+        EXPERT1: 'Legacy',
         CORE: 'Core',
         NAXX: 'Naxxramas',
         GVG: 'GvG',
@@ -441,7 +443,10 @@ let HSArenaInfo = (function() {
             }
         }
         if (filter.set !== '') {
-            if (filter.set !== card.set)
+            if (filter.set === 'LEGACY') {
+                if (card.set !== 'LEGACY' && card.set !== 'EXPERT1')
+                    return false;
+            } else if (filter.set !== card.set)
                 return false;
         }
         if (filter.rarity !== '') {
