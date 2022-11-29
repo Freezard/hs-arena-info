@@ -248,6 +248,25 @@ let HSArenaInfo = (function() {
             console.log(error);
         }
     }
+    
+    // Create the set dropdown based on sets in rotation
+    function createSetDropdown() {
+        let dropdown = document.querySelector('.dropdown-content-classes');
+        
+        let a = document.createElement('a');
+        a.setAttribute('href', '#');
+        a.classList.add('selected');
+        a.innerHTML = 'Any';
+        dropdown.appendChild(a);
+        
+        for (let set in rotation) {
+            a = document.createElement('a');
+            a.setAttribute('href', '#');
+            a.setAttribute('data-json', rotation[set]);
+            a.innerHTML = sets[rotation[set]];
+            dropdown.appendChild(a);
+        }
+    }
 
     function initEventListeners() {
         document.querySelector('.menu').addEventListener('click', function() {
@@ -732,6 +751,7 @@ let HSArenaInfo = (function() {
             createClassWinRates().then(() => {
                 let template = document.getElementById('template-stats').innerHTML;
                 document.querySelector('.container').innerHTML = template;
+                createSetDropdown();
                 createArenaCardData();
                 initEventListeners();
                 //generateChangedCards();
