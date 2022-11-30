@@ -260,6 +260,9 @@ let HSArenaInfo = (function() {
         dropdown.appendChild(a);
         
         for (let set in rotation) {
+            if (rotation[set] === 'EXPERT1')
+                continue;
+            
             a = document.createElement('a');
             a.setAttribute('href', '#');
             a.setAttribute('data-json', rotation[set]);
