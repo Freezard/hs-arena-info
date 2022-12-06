@@ -39,8 +39,8 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const rotation = ['LEGACY', 'EXPERT1', 'NAXX', 'GVG', 'BRM', 'TGT', 'LOE'];
     const version = 1.25;
+    const rotation = ['CORE', 'NAXX', 'GANGS', 'ICECROWN', 'GILNEAS', 'STORMWIND', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS'];
     const sets = {
         LEGACY: 'Legacy',
         EXPERT1: 'Legacy',
@@ -72,6 +72,8 @@ let HSArenaInfo = (function() {
         ALTERAC_VALLEY: 'Alterac',
         THE_SUNKEN_CITY: 'Sunken',
         REVENDRETH: 'Nathria',
+        RETURN_OF_THE_LICH_KING: 'Lich King',
+        PATH_OF_ARTHAS: 'Arthas',
     }
     /*********************************************************
     **************************UTILS***************************
@@ -626,8 +628,8 @@ let HSArenaInfo = (function() {
         if (cardChanged)
             div.classList.add('changed');
         
-        if (cost === undefined && Object.keys(winDraftRates).length !== 0)
-            div.appendChild(createRatesBar(card, cardChanged));
+        //if (cost === undefined && Object.keys(winDraftRates).length !== 0)
+            //div.appendChild(createRatesBar(card, cardChanged));
         
         return div;
     }
