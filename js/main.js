@@ -628,8 +628,8 @@ let HSArenaInfo = (function() {
         if (cardChanged)
             div.classList.add('changed');
         
-        //if (cost === undefined && Object.keys(winDraftRates).length !== 0)
-            //div.appendChild(createRatesBar(card, cardChanged));
+        if (cost === undefined && Object.keys(winDraftRates).length !== 0)
+            div.appendChild(createRatesBar(card, cardChanged));
         
         return div;
     }
