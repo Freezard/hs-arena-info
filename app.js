@@ -26,7 +26,7 @@ app.get("/cardData", function(req, res) {
 });
 
 app.get("/cardRates", function(req, res) {
-	const url = "https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA";
+	const url = "https://hsreplay.net/analytics/query/card_list_free/?GameType=ARENA&TimeRange=CURRENT_EXPANSION";
 
     fetch(url)
         .then(res => res.json())
