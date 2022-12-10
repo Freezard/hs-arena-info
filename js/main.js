@@ -13,9 +13,9 @@ let HSArenaInfo = (function() {
     let classWinRates = {};
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
-    const changedCards = {};
+    const changedCards = {"84392":{"NEUTRAL":{"winrate":45.27,"draftrate":1},"HUNTER":{"winrate":45.27,"draftrate":28.16}}};
     // List of changed cards by name, used by function generateChangedCards
-    const changedCardsRaw = [];
+    const changedCardsRaw = ['Shockspitter'];
     
     // Used for calculating stats/odds
     let totalStats;
@@ -39,7 +39,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.25;
+    const version = 1.26;
     const rotation = ['CORE', 'NAXX', 'GANGS', 'ICECROWN', 'GILNEAS', 'STORMWIND', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS'];
     const sets = {
         LEGACY: 'Legacy',
