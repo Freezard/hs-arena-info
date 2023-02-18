@@ -116,6 +116,27 @@ ul {
   filter: grayscale(70%);
 }
 
+.nav__list-sorting {
+  margin-right: 4px;
+}
+.nav__list-sorting a {
+  width: 25px;
+  height: 27px;
+  padding: 4px;
+}
+
+.nav__list-sorting a.sort-normal {
+  background-image: url("../images/sort-normal.png");
+}
+
+.nav__list-sorting a.sort-desc {
+  background-image: url("../images/sort-desc.png");
+}
+
+.nav__list-sorting a.sort-asc {
+  background-image: url("../images/sort-asc.png");
+}
+
 .dropdown-content {
   display: none;
   position: absolute;

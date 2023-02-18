@@ -32,7 +32,8 @@ let HSArenaInfo = (function() {
         school: '',
         search: '',
         discover: false,
-        recentlyChanged: false
+        recentlyChanged: false,
+        sorting: '',
     };
     
     let settings = {
@@ -140,6 +141,24 @@ let HSArenaInfo = (function() {
                 return false;
             else return true;
         });
+
+        // Add win- and draftrates to card data
+        for (let i in arenaCardData) {
+            let card = arenaCardData[i];
+            if (card.winDraftRates === undefined) {
+                card.winDraftRates = {};
+            }
+            for (let cardClass in winDraftRates) {
+                let winRates = winDraftRates[cardClass][card.dbfId];
+                if (winRates !== undefined) {
+                    if (card.winDraftRates[cardClass] === undefined) {
+                        card.winDraftRates[cardClass] = {};
+                    }
+                    card.winDraftRates[cardClass].included_winrate = winRates.included_winrate;
+                    card.winDraftRates[cardClass].included_popularity = winRates.included_popularity;
+                }
+            }
+        }
     }
     
     // Create class data used when viewing all arena cards
@@ -149,6 +168,8 @@ let HSArenaInfo = (function() {
             (filter.discover && card.cardClass === 'NEUTRAL' && card.classes === undefined) ||
             (card.cardClass === cardClass && card.classes === undefined) ||
             (card.classes !== undefined && card.classes.includes(cardClass)));
+            
+        sortClassCardData(cardClass);
     }
     
     /* Create data used when viewing transformation stats
@@ -327,6 +348,31 @@ let HSArenaInfo = (function() {
                 displayCards();
             }));
             
+        document.querySelectorAll('.nav__list-sorting a').forEach(e => 
+            e.addEventListener('click', function() {
+                switch (filter.sorting) {
+                    case (''):
+                        filter.sorting = 'desc';
+                        e.classList.replace('sort-normal', 'sort-desc');
+                        break;
+                    case ('desc'):
+                        filter.sorting = 'asc';
+                        e.classList.replace('sort-desc', 'sort-asc');
+                        break;
+                    case ('asc'):
+                        filter.sorting = '';
+                        e.classList.replace('sort-asc', 'sort-normal');
+                        break;
+                }
+                
+                if (filteredCardData.length !== 0) {
+                    let currentClass = document.querySelector('.nav__list-classes a.selected').getAttribute('data-json');
+                    sortClassCardData(currentClass);
+                }
+                clearCards();
+                displayCards();
+            }));
+            
         document.querySelectorAll('.nav__list-type a').forEach(e => 
             e.addEventListener('click', function() {
                 setType(this.innerHTML.toUpperCase(), this);
@@ -408,6 +454,48 @@ let HSArenaInfo = (function() {
             console.log(error);
         }
     }
+    
+    function sortClassCardData(cardClass) {
+        if (filter.sorting === 'asc') {
+            filteredCardData.sort(function(a, b) {
+                if (a.winDraftRates[cardClass] === undefined) {
+                    return 1;
+                }
+                if (b.winDraftRates[cardClass] === undefined) {
+                    return -1;
+                }
+                let a_winRate = a.winDraftRates[cardClass].included_winrate;
+                let b_winRate = b.winDraftRates[cardClass].included_winrate;
+                
+                return a_winRate === b_winRate ? 
+                    a.name.localeCompare(b.name) :
+                    a_winRate - b_winRate;
+            });
+        }
+        else if (filter.sorting === 'desc') {
+            filteredCardData.sort(function(a, b) {
+                if (a.winDraftRates[cardClass] === undefined) {
+                    return 1;
+                }
+                if (b.winDraftRates[cardClass] === undefined) {
+                    return -1;
+                }
+                let a_winRate = a.winDraftRates[cardClass].included_winrate;
+                let b_winRate = b.winDraftRates[cardClass].included_winrate;
+                
+                return a_winRate === b_winRate ? 
+                    a.name.localeCompare(b.name) :
+                    b_winRate - a_winRate;
+            });
+        }
+        else if (filter.sorting === '') {
+            filteredCardData.sort(function(a, b) {
+                return a.cost === b.cost ?
+                       a.name.localeCompare(b.name) :
+                       a.cost - b.cost;
+            });
+        }
+    }
     /*********************************************************
     *************************FILTER***************************
     *********************************************************/    
@@ -443,6 +531,7 @@ let HSArenaInfo = (function() {
         
         deselectList('nav__list-type');
         deselectList('nav__list-cost');
+        resetSorting();
         deselectDropdowns();
         document.querySelector('.input-search').value = '';
     }
@@ -553,6 +642,15 @@ let HSArenaInfo = (function() {
         }
         
         return selected;
+    }
+    function resetSorting() {
+        let el = document.querySelector('.nav__list-sorting a');
+            for (let i = el.classList.length - 1; i >= 0; i--) {
+                const className = el.classList[i];
+                if (className.startsWith('sort')) {
+                    el.classList.replace(className, 'sort-normal');
+                }
+            }
     }
     
     function deselectDropdowns() {
