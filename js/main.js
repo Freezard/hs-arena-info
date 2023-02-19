@@ -87,8 +87,18 @@ let HSArenaInfo = (function() {
     function generateChangedCards() {
         let result = {};
         
-        changedCardsRaw.forEach((name) => {
-            let dbfId = getDBFID(name);
+        let allCards = false;
+        let cardArray = changedCardsRaw;
+        
+        // If no card names specified, generate data for all cards
+        if (changedCardsRaw.length === 0) {
+            allCards = true;
+            cardArray = arenaCardData;
+        }
+        
+        cardArray.forEach((card) => {
+            let dbfId = allCards ? card.dbfId : getDBFID(card);
+            
             result[dbfId] = {};
            
             for (let cardClass in winDraftRates) {
@@ -760,7 +770,7 @@ let HSArenaInfo = (function() {
         let div2 = document.createElement('div');
         div2.setAttribute('title', 'Deck win rate');
         div2.innerHTML = '';
-                
+        
         if (settings.relativeWinRates && appliedClass !== 'NEUTRAL') {
             let sign = winRate >= 0 ? '+' : '';
             div2.innerHTML += sign;
@@ -794,6 +804,13 @@ let HSArenaInfo = (function() {
         let div3 = document.createElement('div');
         div3.setAttribute('title', 'Draft rate');
         div3.innerHTML = cardStats ? draftRate + '%' : 'N/A';
+        
+        /*if (Object.keys(cardChanged).length > 0 && cardStats !== undefined) {
+            let difference = Math.round((cardStats.included_popularity - cardChanged[appliedClass].draftrate) * 10) / 10;
+            let sign = difference >= 0 ? '+' : '';
+            div3.innerHTML += ' (' + sign + difference + '%)';
+        }*/
+        
         if (draftRate < 10 )
             div3.classList.add('card-stats--negative');
         else if (draftRate >= 10 && draftRate < 30 )
