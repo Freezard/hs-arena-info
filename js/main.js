@@ -730,7 +730,7 @@ let HSArenaInfo = (function() {
         let cardChanged = changedCards[card.dbfId];
 
         // Mark card if changed recently
-        if (cardChanged !== undefined)
+        if (cardChanged !== undefined && Object.keys(cardChanged).length !== 0)
             div.classList.add('changed');
         
         if (cost === undefined && Object.keys(winDraftRates).length !== 0)
