@@ -592,7 +592,13 @@ let HSArenaInfo = (function() {
         if (filter.search !== '') {
             let search = filter.search.toLowerCase();
             let name = card.name.toLowerCase();
-            let text = card.text ? card.text.toLowerCase().replace(/[^\x00-\x7F]/g, ' ').replace(/\s+/g, ' ') : '';
+            let text = card.text ? card.text
+                .replace(/[^\x00-\x7F]/g, ' ') // Remove non-ASCII characters
+                .replace(/\s+/g, ' ')          // Replace multiple spaces with a single space
+                .replace(/ *\[[^\]]*]/, '')    // Remove square brackets and their contents
+                .replace( /(<([^>]+)>)/ig, '') // Remove HTML tags
+                .replace(/[^a-zA-Z0-9 ]/g, '') // Remove non-alphanumeric characters
+                .toLowerCase() : '';
                         
             if (!name.includes(search) && !text.includes(search))
                 return false;
