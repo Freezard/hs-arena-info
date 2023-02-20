@@ -98,14 +98,14 @@ let HSArenaInfo = (function() {
         
         cardArray.forEach((card) => {
             let dbfId = allCards ? card.dbfId : getDBFID(card);
-            
             result[dbfId] = {};
            
             for (let cardClass in winDraftRates) {
                 if (winDraftRates[cardClass][dbfId]) {
-                    result[dbfId][cardClass] = {};
-                    result[dbfId][cardClass].winrate = winDraftRates[cardClass][dbfId].included_winrate;
-                    result[dbfId][cardClass].draftrate = winDraftRates[cardClass][dbfId].included_popularity;
+                    result[dbfId][cardClass] = {
+                        winrate: winDraftRates[cardClass][dbfId].included_winrate,
+                        draftrate: winDraftRates[cardClass][dbfId].included_popularity
+                    };
                 }
             }
         });
@@ -152,20 +152,18 @@ let HSArenaInfo = (function() {
             else return true;
         });
 
-        // Add win- and draftrates to card data
-        for (let i in arenaCardData) {
-            let card = arenaCardData[i];
+        // Add win- and draft rates to card data
+        for (let card of arenaCardData) {
             if (card.winDraftRates === undefined) {
                 card.winDraftRates = {};
             }
             for (let cardClass in winDraftRates) {
                 let winRates = winDraftRates[cardClass][card.dbfId];
                 if (winRates !== undefined) {
-                    if (card.winDraftRates[cardClass] === undefined) {
-                        card.winDraftRates[cardClass] = {};
-                    }
-                    card.winDraftRates[cardClass].included_winrate = winRates.included_winrate;
-                    card.winDraftRates[cardClass].included_popularity = winRates.included_popularity;
+                    card.winDraftRates[cardClass] = {
+                        included_winrate: winRates.included_winrate,
+                        included_popularity: winRates.included_popularity
+                    };
                 }
             }
         }
@@ -195,9 +193,7 @@ let HSArenaInfo = (function() {
         let all = type.split('+')[1] !== undefined ? type.split('+')[1].split(',') : [];
 
         // TODO: Simplify
-        for (let c in arenaCardData) {
-            let card = arenaCardData[c];
-
+        for (let card of arenaCardData) {
             if (card.type !== 'MINION' || card.set === 'TAVERNS_OF_TIME')
                 continue;
 
@@ -292,14 +288,14 @@ let HSArenaInfo = (function() {
         a.innerHTML = 'Any';
         dropdown.appendChild(a);
         
-        for (let set in rotation) {
-            if (rotation[set] === 'EXPERT1')
+        for (let set of rotation) {
+            if (set === 'EXPERT1')
                 continue;
             
             a = document.createElement('a');
             a.setAttribute('href', '#');
-            a.setAttribute('data-json', rotation[set]);
-            a.innerHTML = sets[rotation[set]];
+            a.setAttribute('data-json', set);
+            a.innerHTML = sets[set];
             dropdown.appendChild(a);
         }
     }
@@ -358,30 +354,29 @@ let HSArenaInfo = (function() {
                 displayCards();
             }));
             
-        document.querySelectorAll('.nav__list-sorting a').forEach(e => 
-            e.addEventListener('click', function() {
-                switch (filter.sorting) {
-                    case (''):
-                        filter.sorting = 'desc';
-                        e.classList.replace('sort-normal', 'sort-desc');
-                        break;
-                    case ('desc'):
-                        filter.sorting = 'asc';
-                        e.classList.replace('sort-desc', 'sort-asc');
-                        break;
-                    case ('asc'):
-                        filter.sorting = '';
-                        e.classList.replace('sort-asc', 'sort-normal');
-                        break;
-                }
-                
-                if (filteredCardData.length !== 0) {
-                    let currentClass = document.querySelector('.nav__list-classes a.selected').getAttribute('data-json');
-                    sortClassCardData(currentClass);
-                }
-                clearCards();
-                displayCards();
-            }));
+        document.querySelector('.nav__list-sorting a').addEventListener('click', function() {
+            switch (filter.sorting) {
+                case (''):
+                    filter.sorting = 'desc';
+                    this.classList.replace('sort-normal', 'sort-desc');
+                    break;
+                case ('desc'):
+                    filter.sorting = 'asc';
+                    this.classList.replace('sort-desc', 'sort-asc');
+                    break;
+                case ('asc'):
+                    filter.sorting = '';
+                    this.classList.replace('sort-asc', 'sort-normal');
+                    break;
+            }
+            
+            if (filteredCardData.length !== 0) {
+                let currentClass = document.querySelector('.nav__list-classes a.selected').getAttribute('data-json');
+                sortClassCardData(currentClass);
+            }
+            clearCards();
+            displayCards();
+        });
             
         document.querySelectorAll('.nav__list-type a').forEach(e => 
             e.addEventListener('click', function() {
@@ -466,45 +461,47 @@ let HSArenaInfo = (function() {
     }
     
     function sortClassCardData(cardClass) {
-        if (filter.sorting === 'asc') {
-            filteredCardData.sort(function(a, b) {
-                if (a.winDraftRates[cardClass] === undefined) {
-                    return 1;
-                }
-                if (b.winDraftRates[cardClass] === undefined) {
-                    return -1;
-                }
-                let a_winRate = a.winDraftRates[cardClass].included_winrate;
-                let b_winRate = b.winDraftRates[cardClass].included_winrate;
-                
-                return a_winRate === b_winRate ? 
-                    a.name.localeCompare(b.name) :
-                    a_winRate - b_winRate;
-            });
-        }
-        else if (filter.sorting === 'desc') {
-            filteredCardData.sort(function(a, b) {
-                if (a.winDraftRates[cardClass] === undefined) {
-                    return 1;
-                }
-                if (b.winDraftRates[cardClass] === undefined) {
-                    return -1;
-                }
-                let a_winRate = a.winDraftRates[cardClass].included_winrate;
-                let b_winRate = b.winDraftRates[cardClass].included_winrate;
-                
+        filteredCardData.sort(function(a, b) {
+            if (filter.sorting === '') {
+                return a.cost === b.cost ?
+                   a.name.localeCompare(b.name) :
+                   a.cost - b.cost;
+            }
+            
+            let a_appliedClass;
+            let b_appliedClass;
+            
+            // Need multi-class cards fix
+            if (a.classes !== undefined && cardClass !== 'ALL') {
+                a_appliedClass = cardClass;
+            } else if (b.classes !== undefined && cardClass !== 'ALL') {
+                b_appliedClass = cardClass;
+            } else if (filter.discover && !['ALL', 'NEUTRAL'].includes(cardClass)) { // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
+                a_appliedClass = cardClass;
+                b_appliedClass = cardClass;
+            } else { 
+                a_appliedClass = a.cardClass;
+                b_appliedClass = b.cardClass;
+            }
+            if (a.winDraftRates[a_appliedClass] === undefined) {
+                return 1;
+            }
+            if (b.winDraftRates[b_appliedClass] === undefined) {
+                return -1;
+            }
+            let a_winRate = a.winDraftRates[a_appliedClass].included_winrate;
+            let b_winRate = b.winDraftRates[b_appliedClass].included_winrate;
+            
+            if (filter.sorting === 'desc') {
                 return a_winRate === b_winRate ? 
                     a.name.localeCompare(b.name) :
                     b_winRate - a_winRate;
-            });
-        }
-        else if (filter.sorting === '') {
-            filteredCardData.sort(function(a, b) {
-                return a.cost === b.cost ?
-                       a.name.localeCompare(b.name) :
-                       a.cost - b.cost;
-            });
-        }
+            } else if (filter.sorting === 'asc') {
+                return a_winRate === b_winRate ? 
+                    a.name.localeCompare(b.name) :
+                    a_winRate - b_winRate;
+            }
+        });
     }
     /*********************************************************
     *************************FILTER***************************
@@ -731,9 +728,9 @@ let HSArenaInfo = (function() {
         div.appendChild(img);
         
         let cardChanged = changedCards[card.dbfId];
-        
+
         // Mark card if changed recently
-        if (cardChanged)
+        if (Object.keys(cardChanged).length !== 0)
             div.classList.add('changed');
         
         if (cost === undefined && Object.keys(winDraftRates).length !== 0)
@@ -743,6 +740,7 @@ let HSArenaInfo = (function() {
     }
     
     // Creates the win/draft rates bar
+    // TODO: Simplify
     function createRatesBar(card, cardChanged) {
         let div = document.createElement('div');
         div.classList.add('card-stats');
@@ -755,10 +753,10 @@ let HSArenaInfo = (function() {
         // TODO: Simplify
         if (card.classes !== undefined && currentClass !== 'ALL')
             appliedClass = currentClass;
-        else if (filter.discover && !["ALL","NEUTRAL"].includes(currentClass)) // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
+        else if (filter.discover && !['ALL', 'NEUTRAL'].includes(currentClass)) // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
             appliedClass = currentClass;
         else appliedClass = card.cardClass;
-        cardStats = winDraftRates[appliedClass][card.dbfId];
+        cardStats = card.winDraftRates[appliedClass];
         
         let winRate;
         let draftRate = cardStats ? Math.round(cardStats.included_popularity * 10) / 10 : 'N/A';
@@ -779,7 +777,7 @@ let HSArenaInfo = (function() {
         
         div2.innerHTML += cardStats ? winRate + '%' : 'N/A';
         
-        if (cardChanged && cardStats !== undefined) {
+        if (cardChanged[appliedClass] !== undefined && cardStats !== undefined) {
             let difference = Math.round((cardStats.included_winrate - cardChanged[appliedClass].winrate) * 10) / 10;
             let sign = difference >= 0 ? '+' : '';
             div2.innerHTML += ' (' + sign + difference + '%)';
@@ -805,7 +803,7 @@ let HSArenaInfo = (function() {
         div3.setAttribute('title', 'Draft rate');
         div3.innerHTML = cardStats ? draftRate + '%' : 'N/A';
         
-        /*if (Object.keys(cardChanged).length > 0 && cardStats !== undefined) {
+        /*if (cardChanged[appliedClass] !== undefined && cardStats !== undefined) {
             let difference = Math.round((cardStats.included_popularity - cardChanged[appliedClass].draftrate) * 10) / 10;
             let sign = difference >= 0 ? '+' : '';
             div3.innerHTML += ' (' + sign + difference + '%)';
