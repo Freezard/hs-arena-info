@@ -730,7 +730,7 @@ let HSArenaInfo = (function() {
         let cardChanged = changedCards[card.dbfId];
 
         // Mark card if changed recently
-        if (Object.keys(cardChanged).length !== 0)
+        if (cardChanged !== undefined)
             div.classList.add('changed');
         
         if (cost === undefined && Object.keys(winDraftRates).length !== 0)
@@ -777,7 +777,7 @@ let HSArenaInfo = (function() {
         
         div2.innerHTML += cardStats ? winRate + '%' : 'N/A';
         
-        if (cardChanged[appliedClass] !== undefined && cardStats !== undefined) {
+        if (cardChanged !== undefined && cardChanged[appliedClass] !== undefined && cardStats !== undefined) {
             let difference = Math.round((cardStats.included_winrate - cardChanged[appliedClass].winrate) * 10) / 10;
             let sign = difference >= 0 ? '+' : '';
             div2.innerHTML += ' (' + sign + difference + '%)';
