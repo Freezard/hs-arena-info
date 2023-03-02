@@ -13,9 +13,9 @@ let HSArenaInfo = (function() {
     let classWinRates = {};
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
-    const changedCards = {};
+    const changedCards = {"64710":{"NEUTRAL":{"winrate":51.54,"draftrate":1.66},"DEATHKNIGHT":{"winrate":46.61,"draftrate":2.17},"DEMONHUNTER":{"winrate":42.1,"draftrate":1.73},"DRUID":{"winrate":47.75,"draftrate":0.91},"HUNTER":{"winrate":51.4,"draftrate":0.76},"MAGE":{"winrate":57.05,"draftrate":1.89},"PALADIN":{"winrate":51.24,"draftrate":1.05},"PRIEST":{"winrate":51.07,"draftrate":2.01},"ROGUE":{"winrate":49.89,"draftrate":1.95},"SHAMAN":{"winrate":49.59,"draftrate":2.97},"WARLOCK":{"winrate":47.24,"draftrate":3.29},"WARRIOR":{"winrate":47.37,"draftrate":1.35}},"65682":{"NEUTRAL":{"winrate":59.59,"draftrate":11.06},"MAGE":{"winrate":59.59,"draftrate":41.95}},"87326":{"NEUTRAL":{"winrate":57.71,"draftrate":2.53},"DEATHKNIGHT":{"winrate":57.71,"draftrate":29.79}}};
     // List of changed cards by name, used by function generateChangedCards
-    const changedCardsRaw = [];
+    const changedCardsRaw = ['Construct Quarter', 'Goldshire Gnoll', 'Grey Sage Parrot'];
     
     // Used for calculating stats/odds
     let totalStats;
@@ -40,7 +40,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.30;
+    const version = 1.31;
     const rotation = ['CORE', 'THE_BARRENS', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS'];
     const sets = {
         LEGACY: 'Legacy',
