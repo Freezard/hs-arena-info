@@ -305,7 +305,7 @@ label {
   margin: 0 auto;
   margin-bottom: 20px;
   padding: 10px;
-  /*display: none;*/
+  display: none;
 }
 
 .news__title {
