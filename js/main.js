@@ -40,12 +40,13 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.33;
-    const rotation = ['CORE', 'THE_BARRENS', 'STORMWIND', 'ALTERAC_VALLEY', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS'];
+    const version = 1.40;
+    const rotation = ['CORE', 'PLACEHOLDER_202204', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
     const sets = {
         LEGACY: 'Legacy',
         EXPERT1: 'Legacy',
         CORE: 'Core',
+        PLACEHOLDER_202204: 'Core2',
         NAXX: 'Naxxramas',
         GVG: 'GvG',
         BRM: 'Blackrock',
@@ -75,6 +76,7 @@ let HSArenaInfo = (function() {
         REVENDRETH: 'Nathria',
         RETURN_OF_THE_LICH_KING: 'Lich King',
         PATH_OF_ARTHAS: 'Arthas',
+        BATTLE_OF_THE_BANDS: 'Festival',
     }
     /*********************************************************
     **************************UTILS***************************
