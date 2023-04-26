@@ -41,12 +41,11 @@ let HSArenaInfo = (function() {
     };    
 
     const version = 1.41;
-    const rotation = ['CORE', 'PLACEHOLDER_202204', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
+    const rotation = ['CORE', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
     const sets = {
         LEGACY: 'Legacy',
         EXPERT1: 'Legacy',
         CORE: 'Core',
-        PLACEHOLDER_202204: 'Core2',
         NAXX: 'Naxxramas',
         GVG: 'GvG',
         BRM: 'Blackrock',
