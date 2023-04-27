@@ -40,7 +40,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.41;
+    const version = 1.42;
     const rotation = ['CORE', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
     const sets = {
         LEGACY: 'Legacy',
