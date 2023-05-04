@@ -557,9 +557,11 @@ let HSArenaInfo = (function() {
         }
         if (filter.race !== '') {
             if (card.race !== 'ALL') {
-                if (filter.race !== 'MECH' && filter.race !== card.race)
+                if (card.race === undefined)
                     return false;
-                else if (filter.race === 'MECH' && card.race !== 'MECHANICAL')
+                if (filter.race !== 'MECH' && !card.races.includes(filter.race))
+                    return false;
+                else if (filter.race === 'MECH' && !card.races.includes('MECHANICAL'))
                     return false;
             }
         }
