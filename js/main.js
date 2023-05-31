@@ -40,7 +40,7 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.43;
+    const version = 1.44;
     const rotation = ['CORE', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
     const sets = {
         LEGACY: 'Legacy',
@@ -813,7 +813,7 @@ let HSArenaInfo = (function() {
         div3.innerHTML = cardStats ? draftRate + '%' : 'N/A';
         
         /*if (cardChanged[appliedClass] !== undefined && cardStats !== undefined) {
-            let difference = Math.round((cardStats.included_popularity - cardChanged[appliedClass].draftrate) * 10) / 10;
+            let difference = ((1 - (cardChanged[appliedClass].draftrate / cardStats.included_popularity)) * 100).toFixed(1);
             let sign = difference >= 0 ? '+' : '';
             div3.innerHTML += ' (' + sign + difference + '%)';
         }*/
