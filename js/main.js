@@ -472,18 +472,14 @@ let HSArenaInfo = (function() {
             let a_appliedClass;
             let b_appliedClass;
             
-            // Need multi-class cards fix
-            if (a.classes !== undefined && cardClass !== 'ALL') {
-                a_appliedClass = cardClass;
-            } else if (b.classes !== undefined && cardClass !== 'ALL') {
-                b_appliedClass = cardClass;
-            } else if (filter.discover && !['ALL', 'NEUTRAL'].includes(cardClass)) { // NEEDED IF ADDING SEPARATE DISCOVER FUNCTION
+            if (filter.discover && !['ALL', 'NEUTRAL'].includes(cardClass)) {
                 a_appliedClass = cardClass;
                 b_appliedClass = cardClass;
-            } else { 
-                a_appliedClass = a.cardClass;
-                b_appliedClass = b.cardClass;
+            } else {
+                a_appliedClass = (a.classes !== undefined && cardClass !== 'ALL') ? cardClass : a.cardClass;
+                b_appliedClass = (b.classes !== undefined && cardClass !== 'ALL') ? cardClass : b.cardClass;
             }
+            
             if (a.winDraftRates[a_appliedClass] === undefined) {
                 return 1;
             }
