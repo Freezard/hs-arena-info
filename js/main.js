@@ -40,8 +40,8 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.44;
-    const rotation = ['CORE', 'THE_SUNKEN_CITY', 'REVENDRETH', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS'];
+    const version = 1.45;
+    const rotation = ['CORE', 'ULDUM', 'BLACK_TEMPLE', 'DARKMOON_FAIRE', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS', 'TITANS'];
     const sets = {
         LEGACY: 'Legacy',
         EXPERT1: 'Legacy',
@@ -76,6 +76,7 @@ let HSArenaInfo = (function() {
         RETURN_OF_THE_LICH_KING: 'Lich King',
         PATH_OF_ARTHAS: 'Arthas',
         BATTLE_OF_THE_BANDS: 'Festival',
+        TITANS: 'Titans',
     }
     /*********************************************************
     **************************UTILS***************************
