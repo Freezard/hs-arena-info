@@ -13,9 +13,9 @@ let HSArenaInfo = (function() {
     let classWinRates = {};
     let winDraftRates = {}; // Card win/draft rates
     // Win rate of changed cards right before their change
-    const changedCards = {"72588":{"NEUTRAL":{"winrate":49.65,"draftrate":0.51},"WARRIOR":{"winrate":49.65,"draftrate":2.41}},"72984":{"NEUTRAL":{"winrate":52.61,"draftrate":0.74},"DEMONHUNTER":{"winrate":52.61,"draftrate":15.85}},"78111":{"NEUTRAL":{"winrate":49.79,"draftrate":0.13},"DEMONHUNTER":{"winrate":49.79,"draftrate":2.95}},"78353":{"NEUTRAL":{"winrate":56.94,"draftrate":1.92},"DEATHKNIGHT":{"winrate":56.94,"draftrate":20.14}},"79612":{"NEUTRAL":{"winrate":46.18,"draftrate":0.35},"ROGUE":{"winrate":46.18,"draftrate":5.78}},"79990":{"NEUTRAL":{"winrate":49.8,"draftrate":1.04},"DEATHKNIGHT":{"winrate":50.6,"draftrate":1.44},"DEMONHUNTER":{"winrate":45.63,"draftrate":0.79},"DRUID":{"winrate":41.75,"draftrate":1.26},"HUNTER":{"winrate":48.48,"draftrate":0.96},"MAGE":{"winrate":49.33,"draftrate":1.45},"PALADIN":{"winrate":47.01,"draftrate":1.17},"PRIEST":{"winrate":49.04,"draftrate":1.1},"ROGUE":{"winrate":45.88,"draftrate":0.88},"SHAMAN":{"winrate":53.09,"draftrate":0.82},"WARLOCK":{"winrate":45.15,"draftrate":1.24},"WARRIOR":{"winrate":54.61,"draftrate":0.75}},"84857":{"NEUTRAL":{"winrate":54.85,"draftrate":0.32},"PRIEST":{"winrate":54.85,"draftrate":2.09}},"85054":{"NEUTRAL":{"winrate":45.68,"draftrate":0.13},"DRUID":{"winrate":45.68,"draftrate":3.79}},"86672":{"NEUTRAL":{"winrate":53.92,"draftrate":0.63},"DEMONHUNTER":{"winrate":53.92,"draftrate":13.53}},"86733":{"NEUTRAL":{"winrate":58.44,"draftrate":0.34},"DEATHKNIGHT":{"winrate":58.44,"draftrate":3.61}},"91001":{"NEUTRAL":{"winrate":50.9,"draftrate":0.25},"WARLOCK":{"winrate":50.9,"draftrate":10.36}},"92267":{"NEUTRAL":{"winrate":59.41,"draftrate":7.5},"WARRIOR":{"winrate":59.41,"draftrate":35.07}},"102229":{"NEUTRAL":{"winrate":49.6,"draftrate":6.05},"DEATHKNIGHT":{"winrate":48.6,"draftrate":8.59},"DEMONHUNTER":{"winrate":46.81,"draftrate":4.95},"DRUID":{"winrate":40.26,"draftrate":6.93},"HUNTER":{"winrate":43.95,"draftrate":4.42},"MAGE":{"winrate":49.52,"draftrate":8.04},"PALADIN":{"winrate":45.71,"draftrate":6.15},"PRIEST":{"winrate":50.53,"draftrate":7.25},"ROGUE":{"winrate":49.18,"draftrate":6.65},"SHAMAN":{"winrate":53.79,"draftrate":4.45},"WARLOCK":{"winrate":44.88,"draftrate":10.46},"WARRIOR":{"winrate":54.01,"draftrate":3.8}}};
+    const changedCards = {};
     // List of changed cards by name, used by function generateChangedCards
-    const changedCardsRaw = ["Sinful Brand", "Felscale Evoker", "Predation", "Battlefield Necromancer", "Blightfang", "High Cultist Basaleph", "Anub'Rekhan", "Scribbling Stenographer", "Symphony of Sins", "From the Depths", "Chorus Riff", "Demolition Renovator", "Rotten Applebaum"];
+    const changedCardsRaw = [];
     
     // Used for calculating stats/odds
     let totalStats;
@@ -40,8 +40,8 @@ let HSArenaInfo = (function() {
         relativeWinRates: false,
     };    
 
-    const version = 1.45;
-    const rotation = ['CORE', 'ULDUM', 'BLACK_TEMPLE', 'DARKMOON_FAIRE', 'RETURN_OF_THE_LICH_KING', 'PATH_OF_ARTHAS', 'BATTLE_OF_THE_BANDS', 'TITANS'];
+    const version = 1.48;
+    const rotation = ['CORE', 'WILD_WEST', 'TITANS', 'PATH_OF_ARTHAS', 'DRAGONS', 'ULDUM'];
     const sets = {
         LEGACY: 'Legacy',
         EXPERT1: 'Legacy',
@@ -77,6 +77,7 @@ let HSArenaInfo = (function() {
         PATH_OF_ARTHAS: 'Arthas',
         BATTLE_OF_THE_BANDS: 'Festival',
         TITANS: 'Titans',
+        WILD_WEST: 'Badlands',
     }
     /*********************************************************
     **************************UTILS***************************
