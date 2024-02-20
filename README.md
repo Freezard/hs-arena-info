@@ -1,7 +1,5 @@
-# HSArena Info
+# HSArena Info (Discontinued)
 A desktop web app dedicated to Hearthstone Arena with helpful (and nerdy) info.
-
-https://www.hsarena.info
  
 ## FEATURES
 - Browse the current arena pool and quickly search for specific cards
